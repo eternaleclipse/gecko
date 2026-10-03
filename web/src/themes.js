@@ -144,10 +144,9 @@ export const THEMES = [
     // band, a grey-green LCD terminal with pixel type, a 7-segment watch face
     // with LIGHT / MODE / ALARM pushers, and the watch's printed label colors.
     // `lcd`: the terminal is drawn on a CSS LCD (it can light up).
-    id: 'digital-watch', name: 'Digital Watch', dark: true, skin: 'casio', lcd: true,
+    id: 'digital-watch', name: 'Digital Watch', dark: true, skin: 'casio', lcd: true, layout: 'watch',
     accent: '#f2c230', need: '#e0473c', brand: '#f2c230',
     termFont: '"VT323", ui-monospace, monospace',
-    termSize: 1.45, // VT323 draws small; scale the terminal font up
     ui: { bg: '#141414', text: '#e8e8e8', panel: '#181818', raise: '#2a2a2a', line: '#3a3a3a', muted: '#a8a8a8', faint: '#6c6c6c', idle: '#a8a8a8' },
     term: ansi('#b4bea0', '#121a10',
       ['#121a10', '#8a1f14', '#2a5418', '#6b5200', '#1d3f7a', '#6b2a6b', '#1d5a5a', '#3d4637'],

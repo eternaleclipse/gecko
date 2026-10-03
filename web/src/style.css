@@ -857,8 +857,6 @@ html.skin-ramen button.primary { font-family: "Mochiy Pop One", var(--ui); font-
 @font-face { font-family: "DSEG14 Classic"; font-weight: 700; font-display: swap;
   src: url("../node_modules/dseg/fonts/DSEG14-Classic/DSEG14Classic-Bold.woff2") format("woff2"); }
 
-#watch { display: none; }
-
 html.skin-casio {
   --ui: "Barlow Semi Condensed", "Instrument Sans Variable", system-ui, sans-serif;
   --lcd: #b4bea0; --lcd-shade: #9ba78a; --seg: #121a10; --seg-ghost: rgb(18 26 16 / 0.09);
@@ -891,40 +889,6 @@ html.skin-casio .brand > span:not(.conn) {
   filter: drop-shadow(0 1px 0 #000);
 }
 html.skin-casio .conn { position: absolute; right: 12px; top: 16px; }
-
-html.skin-casio #watch {
-  display: grid; gap: 4px; margin: 4px 12px 10px; padding: 8px 10px 10px;
-  border-radius: 10px; background: linear-gradient(180deg, #1d1d1d, #0d0d0d);
-  box-shadow: inset 0 1px 0 #3a3a3a, inset 0 -1px 0 #000, 0 0 0 2px #050505, 0 0 0 4px #4a4a4a;
-}
-html.skin-casio .w-print { font: italic 700 9.5px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: 0.14em; text-align: center; }
-html.skin-casio .w-blue { color: var(--print-blue); }
-html.skin-casio .w-yellow { color: var(--print-yellow); }
-html.skin-casio .w-red { color: var(--print-red); }
-html.skin-casio .w-lcd {
-  display: grid; grid-template-columns: auto auto 1fr auto; align-items: end; gap: 4px;
-  padding: 6px 8px 5px; border-radius: 4px; color: var(--seg);
-  background: linear-gradient(180deg, var(--lcd-shade), var(--lcd) 22%);
-  box-shadow: inset 0 2px 5px rgb(0 0 0 / 0.55), 0 0 0 1px #000, 0 0 0 3px #3b3b3b;
-  transition: background 0.2s;
-}
-html.skin-casio.lcd-light .w-lcd { box-shadow: inset 0 2px 5px rgb(0 0 0 / 0.35), 0 0 14px rgb(143 227 207 / 0.55), 0 0 0 1px #000, 0 0 0 3px #3b3b3b; }
-html.skin-casio .w-day { font: 700 13px/1 "DSEG14 Classic", monospace; }
-html.skin-casio .w-date { font: 700 13px/1 "DSEG7 Classic", monospace; }
-html.skin-casio .w-time, html.skin-casio .w-sec { position: relative; font: 700 30px/1 "DSEG7 Classic", monospace; text-align: right; }
-html.skin-casio .w-sec { font-size: 17px; }
-html.skin-casio .w-time::before, html.skin-casio .w-sec::before {
-  content: attr(data-ghost); position: absolute; right: 0; color: var(--seg-ghost); /* unlit segments */
-}
-html.skin-casio .w-pushers { display: flex; justify-content: space-between; margin-top: 4px; }
-html.skin-casio .w-pushers button {
-  font: italic 700 9px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: 0.12em; color: #222;
-  padding: 4px 9px; border-radius: 3px; background: var(--metal);
-  box-shadow: inset 0 1px 0 #fff, 0 1px 0 #000, 0 2px 3px rgb(0 0 0 / 0.6);
-}
-html.skin-casio .w-pushers button:active { transform: translateY(1px); box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.5); }
-html.skin-casio .w-pushers [data-watch=light] { color: var(--print-red); }
-html.skin-casio .w-pushers [data-watch=alarm] { color: var(--print-blue); }
 
 /* printed section labels */
 html.skin-casio .group h3 {
@@ -1056,3 +1020,93 @@ html.skin-casio ::-webkit-scrollbar { width: 12px; height: 12px; }
 html.skin-casio ::-webkit-scrollbar-track { background: #0c0c0c; box-shadow: inset 1px 0 0 #000, inset -1px 0 0 #222; }
 html.skin-casio ::-webkit-scrollbar-thumb { background: var(--metal); border-radius: 2px; box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 #555; }
 html.skin-casio #splash { background: radial-gradient(120% 90% at 30% 0%, #222 0%, #141414 55%, #0b0b0b 100%); }
+
+/* ---------------------------------------------------------------- Digital Watch layout:
+   the window is a wristwatch; the terminal is its LCD (40x20, sized in JS). */
+#watchface[hidden] { display: none; }
+html.layout-watch #app { display: none; }
+html.layout-watch #watchface {
+  position: fixed; inset: 0; display: grid; place-items: center; overflow: hidden;
+  grid-template-rows: 1fr auto 1fr;
+}
+#watchface .strap {
+  justify-self: center; width: min(46vw, 420px); height: 100%; min-height: 20px;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 22px, rgb(0 0 0 / 0.55) 22px 24px, rgb(255 255 255 / 0.05) 24px 25px),
+    linear-gradient(90deg, #0c0c0c, #232323 18%, #1a1a1a 50%, #232323 82%, #0c0c0c);
+  box-shadow: inset 0 0 0 1px #000;
+}
+#watchface .strap-top { border-radius: 0 0 6px 6px; margin-bottom: -14px; }
+#watchface .strap-bottom {
+  border-radius: 6px 6px 0 0; margin-top: -14px;
+  background:
+    radial-gradient(circle at 50% 50%, #000 0 5px, #2a2a2a 5.5px 7px, transparent 7.5px) center 40px / 100% 34px repeat-y,
+    linear-gradient(90deg, #0c0c0c, #232323 18%, #1a1a1a 50%, #232323 82%, #0c0c0c);
+}
+#watchface .case {
+  position: relative; z-index: 1; padding: 22px 30px 20px;
+  border-radius: 34px 34px 40px 40px / 30px 30px 46px 46px;
+  background:
+    repeating-linear-gradient(0deg, rgb(255 255 255 / 0.014) 0 1px, transparent 1px 3px),
+    radial-gradient(130% 100% at 30% 0%, #333 0%, #1a1a1a 40%, #0b0b0b 100%);
+  box-shadow: inset 0 2px 0 rgb(255 255 255 / 0.12), inset 0 -3px 6px #000, 0 0 0 2px #000, 0 18px 50px rgb(0 0 0 / 0.75);
+}
+#watchface .bezel {
+  display: grid; gap: 6px; padding: 10px 18px 12px; border-radius: 14px;
+  background: linear-gradient(180deg, #d8d8d8, #9a9a9a 50%, #c6c6c6);
+  box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 #666, 0 0 0 2px #000;
+}
+#watchface .w-brand { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px; }
+#watchface .w-logo { font: 700 italic 22px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: 0.3em; color: #1a1a1a; text-shadow: 0 1px 0 #eee; }
+#watchface .w-model { font: 700 italic 11px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: 0.22em; color: #b3261e; }
+#watchface .w-print { display: flex; justify-content: space-between; padding: 0 6px; font: 700 italic 10px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: 0.16em; }
+#watchface .w-print-bottom { justify-content: center; gap: 0.6em; }
+#watchface .w-blue { color: #1f55b0; } #watchface .w-yellow { color: #8a6400; } #watchface .w-red { color: #b3261e; }
+#watchface .lcd {
+  display: grid; padding: 6px 8px 6px; border-radius: 6px; color: var(--seg);
+  background: linear-gradient(180deg, var(--lcd-shade), var(--lcd) 8%);
+  box-shadow: inset 0 3px 8px rgb(0 0 0 / 0.55), 0 0 0 2px #111, 0 0 0 4px #333;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+html.lcd-light #watchface .lcd { box-shadow: inset 0 3px 8px rgb(0 0 0 / 0.3), 0 0 30px rgb(143 227 207 / 0.5), 0 0 0 2px #111, 0 0 0 4px #333; }
+#watchface .lcd-top { display: flex; align-items: flex-end; gap: 8px; padding: 2px 4px 6px; border-bottom: 1px solid rgb(18 26 16 / 0.25); }
+#watchface .w-day { font: 700 16px/1 "DSEG14 Classic", monospace; }
+#watchface .w-date { font: 700 16px/1 "DSEG7 Classic", monospace; }
+#watchface .w-tabs { flex: 1; display: flex; gap: 4px; justify-content: center; }
+#watchface .w-tabs b { font: 700 13px/1 "DSEG7 Classic", monospace; padding: 3px 4px; border-radius: 2px; opacity: 0.45; }
+#watchface .w-tabs b.on { opacity: 1; background: var(--seg); color: var(--lcd); }
+#watchface .w-tabs b.need { opacity: 1; animation: lcd-blink 1s steps(1) infinite; }
+#watchface .w-time, #watchface .w-sec { position: relative; font: 700 34px/1 "DSEG7 Classic", monospace; }
+#watchface .w-sec { font-size: 20px; }
+#watchface .w-time::before, #watchface .w-sec::before { content: attr(data-ghost); position: absolute; right: 0; color: var(--seg-ghost); }
+#watchface .lcd-screen { position: relative; }
+#watchface .lcd-screen #stage { position: absolute; inset: 0; background: transparent; }
+html.layout-watch .pane { inset: 0 !important; background: transparent !important; box-shadow: none !important; border-radius: 0; }
+html.layout-watch .pane .xterm { padding: 4px 0 2px 4px; }
+html.layout-watch .pane .xterm-viewport { scrollbar-width: none; }
+html.layout-watch .pane .xterm-viewport::-webkit-scrollbar { display: none; }
+#watchface .lcd-bottom {
+  display: flex; align-items: center; gap: 10px; padding: 5px 4px 1px; border-top: 1px solid rgb(18 26 16 / 0.25);
+  font: 700 12px/1 "DSEG14 Classic", monospace;
+}
+#watchface .w-ws { flex: 1; }
+#watchface .w-alm { opacity: 0.1; }
+#watchface .w-alm.on { opacity: 1; animation: lcd-blink 1s steps(1) infinite; }
+#watchface .w-host { flex: 1; text-align: right; }
+#watchface .pusher {
+  position: absolute; width: 12px; height: 34px; padding: 0; border: 0; cursor: pointer;
+  background: linear-gradient(90deg, #888, #eee 40%, #999); box-shadow: 0 0 0 1px #000, 0 2px 3px rgb(0 0 0 / 0.6);
+}
+#watchface .pusher:active { filter: brightness(0.8); }
+#watchface .p-tl, #watchface .p-bl { left: -11px; border-radius: 4px 0 0 4px; }
+#watchface .p-tr, #watchface .p-br { right: -11px; border-radius: 0 4px 4px 0; }
+#watchface .p-tl:active, #watchface .p-bl:active { left: -8px; }
+#watchface .p-tr:active, #watchface .p-br:active { right: -8px; }
+#watchface .p-tl, #watchface .p-tr { top: 24%; }
+#watchface .p-bl, #watchface .p-br { top: 66%; }
+#watchface .p-label { position: absolute; font: 700 italic 9px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: 0.14em; color: #d8d8d8; pointer-events: none; }
+#watchface .l-tl, #watchface .l-bl { left: 8px; } #watchface .l-tr, #watchface .l-br { right: 8px; }
+#watchface .l-tl, #watchface .l-tr { top: calc(24% + 13px); writing-mode: vertical-rl; }
+#watchface .l-bl, #watchface .l-br { top: calc(66% + 13px); writing-mode: vertical-rl; }
+#watchface .l-tl, #watchface .l-bl { transform: rotate(180deg); }
+#watchface .l-tl { color: #e05a4f; } #watchface .l-br { color: #6c9cf0; }

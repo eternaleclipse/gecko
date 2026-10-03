@@ -557,36 +557,120 @@ class App {
     await this.attachTmux(host, index == null ? name : `${name}:${index}`);
   }
 
-  // Digital Watch theme: the 7-segment face ticks, and its pushers work:
-  // LIGHT lights the LCD for a few seconds, MODE cycles workspaces, ALARM
-  // goes to the agent that needs you.
+  // Digital Watch theme: the window becomes a wristwatch. The terminal
+  // area moves into the watch's LCD at a fixed 40x20; the 7-segment rows show
+  // the time, the tabs and an alarm when an agent needs you; the pushers
+  // work: LIGHT (backlight), MODE (next tab), START·STOP (search), ALARM.
   bindWatch() {
     const root = document.documentElement;
     const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
-    const w = $('#watch');
+    const w = $('#watchface');
+    const pad = (n) => String(n).padStart(2, '0');
     const tick = () => {
-      if (!root.classList.contains('skin-casio')) return;
+      if (!this.watchMode) return;
       const d = new Date();
-      const pad = (n) => String(n).padStart(2, '0');
       w.querySelector('.w-day').textContent = days[d.getDay()];
       w.querySelector('.w-date').textContent = String(d.getDate());
       w.querySelector('.w-time').textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
       w.querySelector('.w-sec').textContent = pad(d.getSeconds());
     };
-    tick();
     setInterval(tick, 1000);
+    this.watchTick = tick;
     let lightTimer = 0;
     w.addEventListener('click', (ev) => {
       const b = ev.target.closest('[data-watch]');
       if (!b) return;
-      if (b.dataset.watch === 'light') {
+      const act = b.dataset.watch;
+      if (act === 'light') {
         root.classList.add('lcd-light');
         clearTimeout(lightTimer);
         lightTimer = setTimeout(() => root.classList.remove('lcd-light'), 3000);
       }
-      if (b.dataset.watch === 'mode') this.cycleWorkspace(1);
-      if (b.dataset.watch === 'alarm') this.nextAgentNeedingYou();
+      if (act === 'mode') this.cycleTab(1);
+      if (act === 'search') this.openPalette();
+      if (act === 'alarm') this.nextAgentNeedingYou();
     });
+    window.addEventListener('resize', () => { if (this.watchMode) this.fitWatchSoon(); });
+  }
+
+  setWatchLayout(on) {
+    if (!!this.watchMode === on) return;
+    const root = document.documentElement;
+    const stage = $('#stage');
+    if (on) {
+      this.stageHome = { parent: stage.parentNode, next: stage.nextSibling };
+      $('#watchface .lcd-screen').appendChild(stage);
+      $('#watchface').hidden = false;
+      root.classList.add('layout-watch');
+      this.watchMode = true;
+      this.watchTick?.();
+      this.renderWatch();
+      this.fitWatchSoon();
+    } else {
+      this.watchMode = false;
+      root.classList.remove('layout-watch');
+      $('#watchface').hidden = true;
+      const h = this.stageHome;
+      if (h) h.parent.insertBefore(stage, h.next);
+      $('#watchface .lcd-screen').style.cssText = '';
+      this.watchFont = 0;
+      for (const p of this.panes.values()) p.setFontSize(this.termFontSize());
+      requestAnimationFrame(() => this.activePane()?.layout(true));
+    }
+  }
+
+  fitWatchSoon() {
+    cancelAnimationFrame(this.watchFitFrame);
+    this.watchFitFrame = requestAnimationFrame(() => this.fitWatch());
+  }
+
+  // Pick the LCD font size that lets the whole watch fit the window, then
+  // size the LCD to exactly 40x20 terminal cells.
+  async fitWatch() {
+    if (!this.watchMode) return;
+    const COLS = 40, ROWS = 20;
+    const screen = $('#watchface .lcd-screen');
+    const caseEl = $('#watchface .case');
+    const cell = (p) => p?.term._core?._renderService?.dimensions?.css?.cell;
+    const pane = this.activePane();
+    // How much room the watch around the LCD takes.
+    const chromeW = caseEl.offsetWidth - screen.offsetWidth;
+    const chromeH = caseEl.offsetHeight - screen.offsetHeight;
+    const c0 = cell(pane);
+    const fs0 = pane ? pane.term.options.fontSize : 18;
+    const perPxW = c0?.width ? c0.width / fs0 : 0.5;
+    const perPxH = c0?.height ? c0.height / fs0 : 1.15;
+    const availH = window.innerHeight - 40 - chromeH;
+    const availW = window.innerWidth - 40 - chromeW;
+    const fs = Math.max(10, Math.min(30, Math.floor(Math.min(availH / (ROWS * perPxH), (availW - 14) / (COLS * perPxW)))));
+    this.watchFont = fs;
+    for (const p of this.panes.values()) p.term.options.fontSize = fs;
+    await new Promise((r) => requestAnimationFrame(r));
+    const c = cell(this.activePane());
+    if (!c?.width) return;
+    const xt = this.activePane().term.element;
+    const padX = parseInt(getComputedStyle(xt).paddingLeft) + parseInt(getComputedStyle(xt).paddingRight);
+    const padY = parseInt(getComputedStyle(xt).paddingTop) + parseInt(getComputedStyle(xt).paddingBottom);
+    // Half a cell of slack so rounding lands on exactly 40x20; 14px is the
+    // scrollbar allowance xterm's fit reserves.
+    screen.style.width = Math.ceil((COLS + 0.5) * c.width + padX + 14) + 'px';
+    screen.style.height = Math.ceil((ROWS + 0.5) * c.height + padY) + 'px';
+    requestAnimationFrame(() => { for (const p of this.panes.values()) if (p.visible) { p.layout(true); p.sendSize(true); } });
+  }
+
+  // The LCD's segment rows: the tabs of this workspace (current one lit),
+  // the workspace, the machine, and ALM when an agent needs you.
+  renderWatch() {
+    if (!this.watchMode) return;
+    const w = $('#watchface');
+    const tabs = this.tabsOf(this.ws);
+    const nums = this.tabNumbers();
+    const act = this.activeId();
+    w.querySelector('.w-tabs').innerHTML = tabs.slice(0, 9).map((t) => `<b class="${t.id === act ? 'on' : ''} ${t.agent?.status === 'needs-input' ? 'need' : ''}">${nums.get(t.id)}</b>`).join('');
+    const s = this.activeSession();
+    w.querySelector('.w-ws').textContent = (this.ws || '').toUpperCase().slice(0, 10);
+    w.querySelector('.w-host').textContent = (s?.host || this.hostName || '').toUpperCase().slice(0, 10);
+    w.querySelector('.w-alm').classList.toggle('on', this.allAgents().some((a) => a.state.status === 'needs-input'));
   }
 
   // Single click acts after a short wait; a second click on the same thing
@@ -724,6 +808,7 @@ class App {
   // The terminal's font size: the person's size, scaled for themes whose
   // terminal font draws small (e.g. a pixel font).
   termFontSize() {
+    if (this.watchMode && this.watchFont) return this.watchFont; // sized to fit the watch
     return Math.round(this.fontSize() * (this.termScale || 1));
   }
 
@@ -737,6 +822,8 @@ class App {
     }
     this.setTermFont(theme.termFont || FONT);
     for (const p of this.panes?.values() || []) p.setTheme(this.termTheme);
+    if (this.panes) this.setWatchLayout(theme.layout === 'watch');
+    if (this.watchMode) this.fitWatchSoon();
   }
 
   // Keyboard shortcuts editor: every action with its keys; add, remove,
@@ -2112,6 +2199,7 @@ class App {
   }
 
   render() {
+    this.renderWatch?.();
     this.renderSidebar();
     this.renderTabs();
     this.showActive();

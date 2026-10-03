@@ -62,19 +62,6 @@ window.__splash = (function () {
       <span>Gecko</span>
       <span id="conn" class="conn" role="status"></span>
     </header>
-    <div id="watch" aria-hidden="true">
-      <div class="w-print w-top"><span class="w-blue">ALARM</span> <span class="w-blue">CHRONOGRAPH</span></div>
-      <div class="w-lcd">
-        <span class="w-day">--</span><span class="w-date">--</span>
-        <span class="w-time" data-ghost="88:88">--:--</span><span class="w-sec" data-ghost="88">--</span>
-      </div>
-      <div class="w-print w-bottom"><span class="w-yellow">WATER</span> <span class="w-red">WR</span> <span class="w-yellow">RESIST</span></div>
-      <div class="w-pushers">
-        <button data-watch="light" tabindex="-1">LIGHT</button>
-        <button data-watch="mode" tabindex="-1">MODE</button>
-        <button data-watch="alarm" tabindex="-1">ALARM</button>
-      </div>
-    </div>
     <div id="side-body"></div>
     <footer>
       <button id="palette-btn" title="Search tabs, tab contents, agents and commands"><span>Search</span><kbd></kbd></button>
@@ -112,6 +99,33 @@ window.__splash = (function () {
       <button data-k="compose">compose</button>
     </div>
   </main>
+</div>
+
+<!-- Digital Watch theme: the whole window becomes a wristwatch; the
+     terminal (#stage) is moved into its LCD while the theme is active. -->
+<div id="watchface" hidden>
+  <div class="strap strap-top"></div>
+  <div class="case">
+    <div class="bezel">
+      <div class="w-brand"><span class="w-logo">GECKO</span><span class="w-model">ILLUMINATOR</span></div>
+      <div class="w-print w-print-top"><span class="w-blue">LIGHT</span><span class="w-blue">ALARM CHRONOGRAPH</span></div>
+      <div class="lcd">
+        <div class="lcd-top">
+          <span class="w-day">--</span><span class="w-date">--</span>
+          <span class="w-tabs"></span>
+          <span class="w-time" data-ghost="88:88">--:--</span><span class="w-sec" data-ghost="88">--</span>
+        </div>
+        <div class="lcd-screen"></div>
+        <div class="lcd-bottom"><span class="w-ws">--</span><span class="w-alm">ALM</span><span class="w-host">--</span></div>
+      </div>
+      <div class="w-print w-print-bottom"><span class="w-yellow">WATER</span> <span class="w-red">WR</span> <span class="w-yellow">RESIST</span></div>
+    </div>
+    <button class="pusher p-tl" data-watch="light" tabindex="-1" aria-label="Light"></button><span class="p-label l-tl">LIGHT</span>
+    <button class="pusher p-bl" data-watch="mode" tabindex="-1" aria-label="Next tab"></button><span class="p-label l-bl">MODE</span>
+    <button class="pusher p-tr" data-watch="search" tabindex="-1" aria-label="Search"></button><span class="p-label l-tr">START·STOP</span>
+    <button class="pusher p-br" data-watch="alarm" tabindex="-1" aria-label="Agent that needs you"></button><span class="p-label l-br">ALARM</span>
+  </div>
+  <div class="strap strap-bottom"></div>
 </div>
 
 <div id="palette" hidden>
