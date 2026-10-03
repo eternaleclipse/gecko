@@ -4,6 +4,28 @@ import '@fontsource-variable/instrument-sans';
 import '@fontsource/barlow/400.css'; // Mission Control skin (DIN-style); only downloaded when used
 import '@fontsource/barlow/500.css';
 import '@fontsource/barlow/600.css';
+// Theme fonts (Latin only; a font downloads only when its theme is in use).
+import '@fontsource/zen-maru-gothic/latin-400.css';
+import '@fontsource/zen-maru-gothic/latin-700.css';
+import '@fontsource/rajdhani/latin-500.css';
+import '@fontsource/rajdhani/latin-700.css';
+import '@fontsource/orbitron/latin-600.css';
+import '@fontsource/share-tech-mono/latin-400.css';
+import '@fontsource/zen-kaku-gothic-new/latin-400.css';
+import '@fontsource/zen-kaku-gothic-new/latin-700.css';
+import '@fontsource/dela-gothic-one/latin-400.css';
+import '@fontsource/bebas-neue/latin-400.css';
+import '@fontsource/barlow-semi-condensed/latin-500.css';
+import '@fontsource/barlow-semi-condensed/latin-700.css';
+import '@fontsource/josefin-sans/latin-400.css';
+import '@fontsource/josefin-sans/latin-600.css';
+import '@fontsource/zilla-slab/latin-500.css';
+import '@fontsource/zilla-slab/latin-700.css';
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-600.css';
+import '@fontsource/m-plus-rounded-1c/latin-500.css';
+import '@fontsource/m-plus-rounded-1c/latin-700.css';
+import '@fontsource/mochiy-pop-one/latin-400.css';
 import './style.css';
 import qrcode from 'qrcode-generator';
 
@@ -667,7 +689,9 @@ class App {
   }
 
   applyTheme(id = this.settings.theme, opacity = this.opacity()) {
-    this.termTheme = paintTheme(resolveTheme(id), opacity);
+    const theme = resolveTheme(id);
+    this.termTheme = paintTheme(theme, opacity);
+    this.setTermFont(theme.termFont || FONT);
     for (const p of this.panes?.values() || []) p.setTheme(this.termTheme);
   }
 
@@ -771,6 +795,18 @@ class App {
       if (!this.keys.bindings[action].includes(combo)) o[action] = [...this.keys.bindings[action], combo];
       save2(o);
     };
+  }
+
+  // Some themes bring their own terminal font. Terminals measure glyphs, so
+  // switch once the font has loaded, then refit.
+  async setTermFont(f) {
+    if (this.termFontWanted === f) return;
+    this.termFontWanted = f;
+    const first = f.split(',')[0].trim();
+    try { await document.fonts.load(`${this.fontSize()}px ${first}`); } catch {}
+    if (this.termFontWanted !== f) return; // changed again meanwhile
+    this.termFont = f; // new terminals use it from now on
+    for (const p of this.panes?.values() || []) p.setFontFamily(f);
   }
 
   // Background opacity applies in the desktop app only.
@@ -1359,7 +1395,7 @@ class App {
     el.className = 'pane';
     el.style.visibility = 'hidden';
     $('#panes').appendChild(el);
-    const t = new Terminal({ fontFamily: FONT, fontSize: this.fontSize(), lineHeight: 1.15, scrollback: 1 });
+    const t = new Terminal({ fontFamily: this.termFont || FONT, fontSize: this.fontSize(), lineHeight: 1.15, scrollback: 1 });
     try {
       t.open(el);
       // Same renderer as real tabs: WebGL snaps cells to whole pixels.

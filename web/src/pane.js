@@ -35,7 +35,7 @@ export class Pane {
     this.term = new Terminal({
       allowProposedApi: true,
       allowTransparency: true, // see-through desktop app and picture themes
-      fontFamily: FONT,
+      fontFamily: app.termFont || FONT,
       fontSize: app.fontSize(),
       lineHeight: 1.15,
       scrollback: 20000,
@@ -187,6 +187,12 @@ export class Pane {
   }
 
   setTheme(t) { this.term.options.theme = t; }
+
+  setFontFamily(f) {
+    if (this.term.options.fontFamily === f) return;
+    this.term.options.fontFamily = f;
+    this.layout(true);
+  }
 
   setFontSize(n) {
     this.term.options.fontSize = n;

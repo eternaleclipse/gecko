@@ -711,3 +711,137 @@ html.has-image .tab-row.cur, html.has-image .tab-row:hover, html.has-image .ws-r
 html.has-image .tmux-row:hover { background: color-mix(in srgb, var(--raise) 60%, transparent); }
 html.has-image #splash { background: var(--bg) var(--bg-image) var(--bg-position, center) / cover no-repeat; }
 .swatch.pic { width: 80px; height: 16px; background-size: cover; background-position: center; }
+
+/* ================================================================ theme skins
+   Each picture theme brings its own type and shapes, not just colors. */
+
+/* ---------------------------------------------------------------- Sakura
+   Soft, rounded and light: Zen Maru Gothic, petal shapes, blossom pink. */
+html.skin-sakura { --ui: "Zen Maru Gothic", "Instrument Sans Variable", system-ui, sans-serif; }
+html.skin-sakura .group h3 { font-weight: 700; color: var(--accent); letter-spacing: 0.02em; }
+html.skin-sakura .group h3::before { content: "✿"; margin-right: 6px; font-size: 13px; }
+html.skin-sakura .group h3 { justify-content: flex-start; }
+html.skin-sakura .group h3 .mini { margin-left: auto; }
+html.skin-sakura .card, html.skin-sakura #palette .box { border-radius: 22px; box-shadow: 0 0 0 1px var(--line), 0 18px 50px rgb(217 58 120 / 0.18); }
+html.skin-sakura button.primary, html.skin-sakura .card .row button, html.skin-sakura #palette-btn { border-radius: 999px; }
+html.skin-sakura #palette li { border-radius: 14px; }
+html.skin-sakura .num { border-radius: 50%; }
+html.skin-sakura .tab.cur { border-radius: 14px 14px 0 0; }
+html.skin-sakura .tab.cur::after { left: 14px; right: 14px; height: 3px; border-radius: 3px; }
+html.skin-sakura .tab-row.cur { border-left: 0; border-radius: 0 999px 999px 0; margin-right: 10px; width: calc(100% - 10px); }
+html.skin-sakura .ctag { border-radius: 999px; }
+
+/* ---------------------------------------------------------------- Cyberpunk
+   Neon on night: Rajdhani with Orbitron labels, cut corners, glow. */
+html.skin-cyberpunk { --ui: "Rajdhani", "Instrument Sans Variable", system-ui, sans-serif; --cut: 9px; }
+html.skin-cyberpunk body { font-weight: 500; font-size: 14.5px; }
+html.skin-cyberpunk .group h3, html.skin-cyberpunk .brand, html.skin-cyberpunk .card h2, html.skin-cyberpunk #palette .k {
+  font-family: "Orbitron", var(--ui); text-transform: uppercase; letter-spacing: 0.16em; font-size: 10.5px; color: #05d9e8;
+}
+html.skin-cyberpunk .brand { font-size: 13px; color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+html.skin-cyberpunk .card h2 { font-size: 14px; color: var(--accent); text-shadow: 0 0 12px color-mix(in srgb, var(--accent) 70%, transparent); }
+html.skin-cyberpunk .ws.cur .ws-name, html.skin-cyberpunk #palette li.sel .l, html.skin-cyberpunk .tab.cur .nm { text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 80%, transparent); }
+html.skin-cyberpunk .tab.cur::after { box-shadow: 0 0 12px 1px var(--accent); }
+html.skin-cyberpunk button.primary, html.skin-cyberpunk .card .row button, html.skin-cyberpunk #palette .box, html.skin-cyberpunk .card, html.skin-cyberpunk #palette-btn {
+  border-radius: 0; clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+}
+html.skin-cyberpunk #palette .box, html.skin-cyberpunk .card { box-shadow: inset 0 0 0 1px #05d9e8; }
+html.skin-cyberpunk button.primary { text-transform: uppercase; letter-spacing: 0.12em; box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 60%, transparent); }
+html.skin-cyberpunk .num { border-radius: 0; }
+html.skin-cyberpunk .num.s-working, html.skin-cyberpunk .num.s-needs-input { box-shadow: 0 0 10px currentColor; }
+html.skin-cyberpunk .ctag { border-radius: 0; color: #05d9e8; background: color-mix(in srgb, #05d9e8 14%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, #05d9e8 50%, transparent); }
+
+/* ---------------------------------------------------------------- Neo-Tokyo
+   Heavy display labels (Dela Gothic One), signal-red blocks, square edges. */
+html.skin-neotokyo { --ui: "Zen Kaku Gothic New", "Instrument Sans Variable", system-ui, sans-serif; }
+html.skin-neotokyo .group h3, html.skin-neotokyo .brand, html.skin-neotokyo .card h2 {
+  font-family: "Dela Gothic One", var(--ui); font-weight: 400; letter-spacing: 0.04em; color: var(--text);
+}
+html.skin-neotokyo .group h3 { font-size: 13px; justify-content: flex-start; }
+html.skin-neotokyo .group h3::before { content: ""; width: 9px; height: 9px; margin-right: 8px; background: var(--accent); }
+html.skin-neotokyo .group h3 .mini { margin-left: auto; }
+html.skin-neotokyo .brand { font-size: 16px; letter-spacing: 0.08em; }
+html.skin-neotokyo button, html.skin-neotokyo .card, html.skin-neotokyo #palette .box, html.skin-neotokyo #palette li,
+html.skin-neotokyo .num, html.skin-neotokyo .ctag, html.skin-neotokyo #palette-btn, html.skin-neotokyo input { border-radius: 0 !important; }
+html.skin-neotokyo .tab.cur::after { top: 0; bottom: auto; height: 3px; }
+html.skin-neotokyo .tab.cur .num { background: var(--accent); color: #fff; box-shadow: none; }
+html.skin-neotokyo .tab-row.cur { border-left-width: 4px; }
+html.skin-neotokyo button.primary { font-family: "Dela Gothic One", var(--ui); font-weight: 400; letter-spacing: 0.05em; }
+
+/* ---------------------------------------------------------------- Dirt Bike
+   Race-day: Bebas Neue, slanted plates, yellow number-plate tab numbers. */
+html.skin-dirtbike { --ui: "Barlow Semi Condensed", "Instrument Sans Variable", system-ui, sans-serif; }
+html.skin-dirtbike body { font-weight: 500; }
+html.skin-dirtbike .group h3, html.skin-dirtbike .brand, html.skin-dirtbike .card h2, html.skin-dirtbike #palette .k {
+  font-family: "Bebas Neue", var(--ui); font-weight: 400; font-size: 16px; letter-spacing: 0.06em; font-style: italic;
+}
+html.skin-dirtbike .group h3 { color: var(--accent); }
+html.skin-dirtbike .brand { font-size: 22px; }
+html.skin-dirtbike #palette .k { font-size: 14px; }
+html.skin-dirtbike .num {
+  font-family: "Bebas Neue", var(--ui); font-weight: 400; font-size: 13px; background: #ffd500; color: #111;
+  box-shadow: inset 0 0 0 1px #111; border-radius: 3px;
+}
+html.skin-dirtbike .num.s-working { background: var(--accent); }
+html.skin-dirtbike .num.s-needs-input { background: var(--need); }
+html.skin-dirtbike .tab.cur::after { height: 4px; transform: skewX(-20deg); }
+html.skin-dirtbike button.primary, html.skin-dirtbike .card .row button {
+  border-radius: 0; clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); padding-left: 18px; padding-right: 18px;
+  font-family: "Bebas Neue", var(--ui); font-weight: 400; font-size: 15px; letter-spacing: 0.06em;
+}
+html.skin-dirtbike .ctag { font-family: "Bebas Neue", var(--ui); font-weight: 400; font-size: 12px; font-style: italic; }
+
+/* ---------------------------------------------------------------- Summit
+   Outdoor poster: Josefin Sans, airy caps, hairlines, alpenglow. */
+html.skin-summit { --ui: "Josefin Sans", "Instrument Sans Variable", system-ui, sans-serif; }
+html.skin-summit body { font-size: 14.5px; }
+html.skin-summit .group h3, html.skin-summit .card h2, html.skin-summit #palette .k {
+  text-transform: uppercase; letter-spacing: 0.24em; font-weight: 600; font-size: 11px;
+}
+html.skin-summit .group h3 { justify-content: flex-start; color: var(--muted); }
+html.skin-summit .group h3::before { content: "▲"; margin-right: 8px; font-size: 9px; color: var(--accent); letter-spacing: 0; }
+html.skin-summit .group h3 .mini { margin-left: auto; }
+html.skin-summit .brand { text-transform: uppercase; letter-spacing: 0.3em; font-weight: 600; font-size: 13px; }
+html.skin-summit .card h2 { font-size: 13px; }
+html.skin-summit .card, html.skin-summit #palette .box { border-radius: 4px; }
+html.skin-summit .tab.cur::after { height: 1px; }
+html.skin-summit .tab-row.cur { border-left-width: 1px; }
+html.skin-summit button.primary { text-transform: uppercase; letter-spacing: 0.18em; font-size: 11.5px; border-radius: 2px; }
+
+/* ---------------------------------------------------------------- Wood Shop
+   Slab serif and small caps, sturdy borders, oak and walnut. */
+html.skin-woodshop { --ui: "Zilla Slab", Georgia, serif; }
+html.skin-woodshop body { font-size: 15px; font-weight: 500; }
+html.skin-woodshop .group h3, html.skin-woodshop .card h2, html.skin-woodshop #palette .k {
+  font-variant: small-caps; text-transform: lowercase; letter-spacing: 0.1em; font-weight: 700; font-size: 14px;
+}
+html.skin-woodshop .group h3 { color: var(--accent); }
+html.skin-woodshop .brand { font-weight: 700; font-size: 17px; }
+html.skin-woodshop .card, html.skin-woodshop #palette .box { border-radius: 6px; box-shadow: 0 0 0 2px var(--line), 0 0 0 4px color-mix(in srgb, var(--bg) 80%, transparent), 0 20px 50px rgb(0 0 0 / 0.5); }
+html.skin-woodshop .num { border-radius: 3px; box-shadow: inset 0 0 0 1.5px var(--faint); font-family: "IBM Plex Mono", monospace; }
+html.skin-woodshop .tab.cur::after { height: 3px; }
+html.skin-woodshop button.primary { font-weight: 700; border-radius: 4px; box-shadow: inset 0 -2px 0 rgb(0 0 0 / 0.25); }
+html.skin-woodshop .ctag { font-family: "IBM Plex Mono", monospace; font-stretch: 100%; }
+
+/* ---------------------------------------------------------------- Ramen
+   Playful and warm: M PLUS Rounded, Mochiy Pop One labels, a noren tab. */
+html.skin-ramen { --ui: "M PLUS Rounded 1c", "Instrument Sans Variable", system-ui, sans-serif; }
+html.skin-ramen body { font-weight: 500; }
+html.skin-ramen .group h3, html.skin-ramen .brand, html.skin-ramen .card h2, html.skin-ramen #palette .k {
+  font-family: "Mochiy Pop One", var(--ui); font-weight: 400; letter-spacing: 0.02em;
+}
+html.skin-ramen .group h3 { color: var(--accent); font-size: 12.5px; }
+html.skin-ramen .brand { font-size: 16px; }
+html.skin-ramen #palette .k { font-size: 11px; }
+/* the current tab hangs like a noren curtain: lantern red with slits */
+html.skin-ramen .tab.cur {
+  color: #fff; border-radius: 0 0 10px 10px;
+  background: repeating-linear-gradient(90deg, transparent 0 calc(33.3% - 1px), rgb(0 0 0 / 0.28) calc(33.3% - 1px) 33.3%), var(--need) !important;
+}
+html.skin-ramen .tab.cur::after { display: none; }
+html.skin-ramen .tab.cur .num { color: #fff; box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.7); }
+html.skin-ramen .tab.cur .git, html.skin-ramen .tab.cur .x { color: rgb(255 255 255 / 0.8); }
+html.skin-ramen .num { border-radius: 50%; }
+html.skin-ramen .card, html.skin-ramen #palette .box { border-radius: 16px; }
+html.skin-ramen button.primary, html.skin-ramen #palette-btn { border-radius: 999px; }
+html.skin-ramen button.primary { font-family: "Mochiy Pop One", var(--ui); font-weight: 400; }

@@ -74,6 +74,71 @@ export const THEMES = [
       ['#3f6a78', '#ffa197', '#a5eacb', '#f8d696', '#98c8ef', '#e7b9ef', '#95e6ea', '#ffffff']),
   },
   {
+    // Light: petal white, plum text, blossom pink. Rounded and soft.
+    id: 'sakura', name: 'Sakura', dark: false, skin: 'sakura', image: '/themes/sakura.jpg', position: 'center 35%', veil: 0.87,
+    accent: '#d93a78', need: '#d9781f', brand: '#f47ba8',
+    ui: { panel: '#ffeef3', raise: '#ffdce8', line: '#f2c2d3', muted: '#86576b', faint: '#b38799', idle: '#86576b' },
+    term: ansi('#fff6f9', '#3a1f2c',
+      ['#3a1f2c', '#b82a45', '#3d7a2c', '#8a5a00', '#3f66b0', '#b0408a', '#2c8585', '#c9b0bb'],
+      ['#7a5466', '#d9536b', '#629c4c', '#b8851f', '#5880c4', '#c45a9e', '#3f9a9a', '#ffffff']),
+  },
+  {
+    // Neon on night violet: hot magenta, electric cyan, warning yellow.
+    id: 'cyberpunk', name: 'Cyberpunk', dark: true, skin: 'cyberpunk', image: '/themes/cyberpunk.jpg', position: 'center', veil: 0.62,
+    accent: '#ff2a6d', need: '#f9f002', brand: '#ff2a6d',
+    termFont: '"Share Tech Mono", ui-monospace, monospace',
+    ui: { panel: '#120424', raise: '#22093d', line: '#3a0f5e', muted: '#b494d8', faint: '#7a5a9c', idle: '#b494d8' },
+    term: ansi('#0b0215', '#f2e9ff',
+      ['#1a0833', '#ff2a6d', '#3cff9e', '#f9f002', '#3d7bff', '#d16bff', '#05d9e8', '#e0d4f5'],
+      ['#4a2a6e', '#ff6b98', '#7dffbf', '#fbf66b', '#7aa4ff', '#e3a0ff', '#6ff0fa', '#ffffff']),
+  },
+  {
+    // Shinjuku at night: signal red on deep navy, heavy display type.
+    id: 'neo-tokyo', name: 'Neo-Tokyo', dark: true, skin: 'neotokyo', image: '/themes/neo-tokyo.jpg', position: 'center 60%', veil: 0.64,
+    accent: '#ff3b3b', need: '#ffd166', brand: '#ff3b3b',
+    ui: { panel: '#0b1124', raise: '#172042', line: '#232f57', muted: '#9aa6c8', faint: '#5d6890', idle: '#9aa6c8' },
+    term: ansi('#070b18', '#eaf0ff',
+      ['#172042', '#ff3b3b', '#56e39f', '#ffd166', '#4d8dff', '#ff6bd6', '#4dd9ff', '#d5dcf0'],
+      ['#3d4a78', '#ff7070', '#8aefbf', '#ffe09a', '#83b0ff', '#ff9be3', '#86e6ff', '#ffffff']),
+  },
+  {
+    // Race orange on mud, lime for attention, number-plate tabs.
+    id: 'dirt-bike', name: 'Dirt Bike', dark: true, skin: 'dirtbike', image: '/themes/dirt-bike.jpg', position: 'center 40%', veil: 0.66,
+    accent: '#ff6a00', need: '#c6ff00', brand: '#ff6a00',
+    ui: { panel: '#1c1612', raise: '#2c231b', line: '#3b2f24', muted: '#b8a48f', faint: '#7d6a57', idle: '#b8a48f' },
+    term: ansi('#15110d', '#f4ece2',
+      ['#2c231b', '#ff4d2e', '#9be564', '#ffc21a', '#4fa3ff', '#e06bd8', '#3fd6c6', '#e2d6c6'],
+      ['#5a4a3b', '#ff7d63', '#bdf08f', '#ffd55c', '#83beff', '#ec97e6', '#76e4d8', '#ffffff']),
+  },
+  {
+    // Alpenglow on night slate, glacier blue, classic outdoor-poster type.
+    id: 'summit', name: 'Summit', dark: true, skin: 'summit', image: '/themes/summit.jpg', position: '70% 40%', veil: 0.6,
+    accent: '#ff9a52', need: '#ffcf5c', brand: '#ff9a52',
+    ui: { panel: '#101a24', raise: '#1c2a38', line: '#2a3b4c', muted: '#a3b3c2', faint: '#687a8c', idle: '#a3b3c2' },
+    term: ansi('#0c141c', '#eef3f7',
+      ['#1c2a38', '#ef6f6c', '#8fd19e', '#ffcf5c', '#7cc4ff', '#c7a0e8', '#79d6d3', '#d9e2ea'],
+      ['#4a5c6e', '#f59492', '#b0e0bb', '#ffdd8a', '#a6d6ff', '#d8bdf0', '#a0e3e1', '#ffffff']),
+  },
+  {
+    // Walnut and oak, safety red, slab serif, a workshop mono.
+    id: 'wood-shop', name: 'Wood Shop', dark: true, skin: 'woodshop', image: '/themes/wood-shop.jpg', position: 'center 45%', veil: 0.66,
+    accent: '#e8a24a', need: '#e4572e', brand: '#e8a24a',
+    termFont: '"IBM Plex Mono", ui-monospace, monospace',
+    ui: { panel: '#21170f', raise: '#33241a', line: '#4a3424', muted: '#c2a68a', faint: '#8a6e55', idle: '#c2a68a' },
+    term: ansi('#1a120c', '#f3e7d7',
+      ['#33241a', '#e4572e', '#9cc069', '#e8b04a', '#7fa6c9', '#c98bb0', '#7fbfb1', '#e0d2bf'],
+      ['#5e4634', '#ee8060', '#b8d590', '#f0c878', '#a3c0dc', '#dcaecb', '#a3d4c9', '#ffffff']),
+  },
+  {
+    // Lantern red and broth gold on lacquer, playful rounded type, a noren tab.
+    id: 'ramen', name: 'Ramen', dark: true, skin: 'ramen', image: '/themes/ramen.jpg', position: 'center', veil: 0.72, sideVeil: 0.8,
+    accent: '#f2b33d', need: '#e63946', brand: '#e63946',
+    ui: { panel: '#1d0f0a', raise: '#2e1811', line: '#47241a', muted: '#d0a98a', faint: '#8e6a55', idle: '#d0a98a' },
+    term: ansi('#170c08', '#fbefe0',
+      ['#2e1811', '#e63946', '#8ccf6e', '#f2b33d', '#6fa8dc', '#e07aa8', '#6cc7c2', '#ead9c6'],
+      ['#5e3a2c', '#f06a75', '#afe095', '#f7cb72', '#98c1e8', '#eca2c4', '#95dad6', '#ffffff']),
+  },
+  {
     id: 'dracula', name: 'Dracula', dark: true, accent: '#bd93f9', need: '#ffb86c',
     term: ansi('#282a36', '#f8f8f2',
       ['#21222c', '#ff5555', '#50fa7b', '#f1fa8c', '#bd93f9', '#ff79c6', '#8be9fd', '#f8f8f2'],
@@ -203,7 +268,7 @@ export function paintTheme(s, opacity = 1) {
     root.style.setProperty('--bg-image', `url("${s.image}")`);
     root.style.setProperty('--bg-position', s.position || 'center');
     root.style.setProperty('--veil', alpha(ui.bg, s.veil ?? 0.7));
-    root.style.setProperty('--side-tint', alpha(ui.panel, 0.5));
+    root.style.setProperty('--side-tint', alpha(ui.panel, s.sideVeil ?? 0.5));
     // The window's opacity over the desktop applies to the photo too.
     root.style.setProperty('--win-opacity', String(opacity));
     root.style.setProperty('--surface-term', 'transparent');

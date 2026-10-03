@@ -31,8 +31,10 @@ machines at once, from a desktop or a phone.
   is already in a tab goes to that tab instead of opening another one. tmux
   inside a plain ssh tab is recognised from its status bar.
 - **Themes.** A green take on Nord by default, plus Mission Control (a
-  launch-webcast skin with DIN-style type), picture themes (Mt. Fuji,
-  Jellyfish) and the classics (Dracula, Nord, Tokyo Night, Catppuccin, One
+  launch-webcast skin with DIN-style type), photo themes that bring their own
+  fonts and shapes (Sakura, Cyberpunk, Neo-Tokyo, Dirt Bike, Summit, Wood Shop,
+  Ramen, Mt. Fuji, Jellyfish; CC0 photos, credits in
+  `web/public/themes/CREDITS.md`) and the classics (Dracula, Nord, Tokyo Night, Catppuccin, One
   Dark, Gruvbox, Solarized, GitHub Light). The desktop app adds a see-through
   background.
 - **Settings follow you.** Theme, fonts, key bindings and the rest live in
@@ -194,8 +196,9 @@ The mobile layout has:
 
 Type `?` in the palette to list every shortcut. **Change Theme** in the
 palette previews themes live: Gecko (a green take on Nord, following the system's
-light or dark mode), Gecko Dark and Light, Mission Control, Mt. Fuji and
-Jellyfish (with pictures), Dracula, Nord, Tokyo Night, Catppuccin, One Dark,
+light or dark mode), Gecko Dark and Light, Mission Control, the photo themes
+(Sakura, Cyberpunk, Neo-Tokyo, Dirt Bike, Summit, Wood Shop, Ramen, Mt. Fuji,
+Jellyfish), Dracula, Nord, Tokyo Night, Catppuccin, One Dark,
 Gruvbox, Solarized and GitHub Light. Like all settings, the theme is saved in
 `~/.gecko-terminal/settings.json` and shared by every window. Browsers keep a few combos for
 themselves in a normal tab. The app window (`gecko open`, or an installed PWA)
