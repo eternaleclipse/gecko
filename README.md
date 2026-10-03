@@ -21,6 +21,13 @@
 </p>
 
 <p align="center">
+  <img alt="Go" src="https://img.shields.io/badge/Go-1.22+-00ADD8?logo=go&logoColor=white">
+  <img alt="Platforms" src="https://img.shields.io/badge/Linux%20%C2%B7%20macOS%20%C2%B7%20Windows-a3be8c">
+  <img alt="Mobile" src="https://img.shields.io/badge/phone-PWA-d08770">
+  <img alt="Agents" src="https://img.shields.io/badge/agents-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Gemini%20%C2%B7%20Aider-88c0d0">
+</p>
+
+<p align="center">
   <img src="docs/img/hero.png" alt="Gecko with workspaces on two machines, Claude Code working and Codex waiting for approval in the agent dock">
 </p>
 
