@@ -1,0 +1,15 @@
+{
+  "name": "gecko",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Native window for Gecko: transparency, blur, no browser chrome",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^44.5.1"
+  },
+  "productName": "Gecko",
+  "desktopName": "gecko.desktop"
+}

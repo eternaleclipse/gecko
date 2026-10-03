@@ -1,0 +1,7 @@
+# Gecko shell integration for zsh (ZDOTDIR shim). Runs your real startup
+# files from your own ZDOTDIR, then installs the hooks from .zshrc.
+__GECKO_ZDOTDIR="$ZDOTDIR"
+ZDOTDIR="${GECKO_USER_ZDOTDIR:-$HOME}"
+[[ -r "$ZDOTDIR/.zshenv" ]] && source "$ZDOTDIR/.zshenv"
+GECKO_USER_ZDOTDIR="$ZDOTDIR"
+ZDOTDIR="$__GECKO_ZDOTDIR"

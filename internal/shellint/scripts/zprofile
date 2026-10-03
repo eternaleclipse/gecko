@@ -1,0 +1,3 @@
+ZDOTDIR="$GECKO_USER_ZDOTDIR"
+[[ -r "$ZDOTDIR/.zprofile" ]] && source "$ZDOTDIR/.zprofile"
+ZDOTDIR="$__GECKO_ZDOTDIR"

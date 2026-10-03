@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="theme-color" content="#323c35">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Gecko</title>
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/main.css">
+<script>
+// Start animation: play once per window, never on reloads (Restart Gecko)
+// and never when the system asks for reduced motion.
+try {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || sessionStorage.getItem('gecko.started')) document.documentElement.classList.add('no-splash');
+  sessionStorage.setItem('gecko.started', '1');
+} catch (e) {}
+// Loading bar: the app reports real progress (code, font, connection,
+// tabs). The splash leaves once loading is done and the toes have landed,
+// or after 3s whatever happens.
+window.__splash = (function () {
+  var t0 = performance.now(), progress = 0, finished = false;
+  function el() { return document.getElementById('splash'); }
+  // What the bar shows: real progress, but never faster than a smooth fill
+  // timed with the toes (~600ms), so a fast load still looks like one motion.
+  function frame() {
+    var s = el();
+    if (!s) return;
+    var t = Math.min(1, (performance.now() - t0) / 600);
+    var shown = Math.min(progress, 1 - Math.pow(1 - t, 3));
+    s.style.setProperty('--p', shown.toFixed(3));
+    if (shown < 1) requestAnimationFrame(frame);
+  }
+  function set(p) {
+    progress = Math.max(progress, p);
+    requestAnimationFrame(frame);
+  }
+  function done() {
+    if (finished) return;
+    finished = true;
+    set(1);
+    setTimeout(function () {
+      var s = el();
+      if (!s) return;
+      s.classList.add('done');
+      setTimeout(function () { s.remove(); }, 320);
+    }, Math.max(0, 660 - (performance.now() - t0)));
+  }
+  setTimeout(done, 3000);
+  return { set: set, done: done };
+})();
+</script>
+</head>
+<body>
+<div id="splash" aria-hidden="true"><svg viewBox="2.4 2.2 27.6 29.2"><path class="leg" d="M15.6 21.8C14.8 25.4 13.9 27.6 12.5 30.2"/><g class="toe t0"><path class="pad" d="M15.03 20.46L11.72 19.72Q10.63 20.40 10.10 20.30A1.75 2.71 -80.0 0 1 10.71 16.85Q11.24 16.95 12.03 17.96L15.40 18.39Z"/><path class="ridge" d="M11.44 19.74Q11.16 18.71 11.77 17.84"/><path class="ridge" d="M10.08 19.62Q9.83 18.48 10.46 17.49"/><path class="ridge" d="M8.78 19.21Q8.49 18.24 9.09 17.43"/></g><g class="toe t1"><path class="pad" d="M14.68 19.57L11.39 15.39Q9.97 15.21 9.58 14.74A1.95 3.02 -40.0 0 1 12.57 12.24Q12.95 12.70 12.89 14.13L16.44 18.09Z"/><path class="ridge" d="M11.12 15.22Q11.66 14.19 12.77 13.84"/><path class="ridge" d="M10.05 14.15Q10.69 13.03 11.90 12.60"/><path class="ridge" d="M9.23 12.86Q9.71 11.87 10.78 11.57"/></g><g class="toe t2"><path class="pad" d="M14.92 18.71L14.53 12.24Q13.41 11.22 13.35 10.59A2.05 3.18 -5.0 0 1 17.44 10.23Q17.49 10.87 16.56 12.06L17.31 18.50Z"/><path class="ridge" d="M14.39 11.94Q15.48 11.39 16.65 11.74"/><path class="ridge" d="M14.12 10.36Q15.34 9.81 16.65 10.14"/><path class="ridge" d="M14.19 8.76Q15.20 8.22 16.30 8.58"/></g><g class="toe t3"><path class="pad" d="M15.75 18.14L19.08 13.15Q18.79 11.69 19.11 11.16A2.00 3.10 32.0 0 1 22.51 13.28Q22.18 13.81 20.74 14.19L17.71 19.36Z"/><path class="ridge" d="M19.13 12.82Q20.31 13.02 21.01 13.99"/><path class="ridge" d="M19.84 11.43Q21.13 11.71 21.94 12.75"/><path class="ridge" d="M20.84 10.23Q21.95 10.39 22.59 11.32"/></g><g class="toe t4"><path class="pad" d="M16.78 18.27L20.85 16.96Q21.46 15.77 21.98 15.58A1.80 2.79 70.0 0 1 23.21 18.96Q22.69 19.15 21.46 18.63L17.50 20.24Z"/><path class="ridge" d="M21.08 16.76Q21.84 17.55 21.76 18.64"/><path class="ridge" d="M22.35 16.18Q23.15 17.07 23.11 18.27"/><path class="ridge" d="M23.72 15.87Q24.46 16.59 24.36 17.62"/></g><ellipse class="palm" cx="16.4" cy="20.1" rx="4.1" ry="3.6"/></svg><div class="bar"><i></i></div></div>
+<div id="app">
+  <aside id="side" aria-label="Workspaces and machines">
+    <header class="brand">
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><use href="/icon.svg#mark"/></svg>
+      <span>Gecko</span>
+      <span id="conn" class="conn" role="status"></span>
+    </header>
+    <div id="side-body"></div>
+    <footer>
+      <button id="palette-btn" title="Search tabs, tab contents, agents and commands"><span>Search</span><kbd></kbd></button>
+    </footer>
+  </aside>
+  <div id="scrim"></div>
+  <main id="main">
+    <nav id="tabbar">
+      <button id="menu-btn" aria-label="Show or hide workspaces">☰</button>
+      <span id="ws-title"></span>
+      <div id="tabs" role="tablist"></div>
+      <button id="new-tab" aria-label="New tab" title="New tab">+</button>
+    </nav>
+    <div id="stage">
+      <div id="panes"></div>
+      <div id="empty"></div>
+      <div id="find" hidden><input type="search" placeholder="Find" aria-label="Find in terminal"><button data-close aria-label="Close find">×</button></div>
+    </div>
+    <div id="compose" hidden>
+      <textarea rows="1" placeholder="Message for this tab. Enter sends, Shift+Enter for a new line" aria-label="Compose"></textarea>
+      <button data-send class="primary">Send</button>
+    </div>
+    <div id="dock" hidden aria-label="Coding agents"></div>
+    <div id="statusline"></div>
+    <div id="keybar" aria-label="Extra keys">
+      <button data-k="esc">esc</button><button data-k="tab">tab</button>
+      <button data-k="ctrl">ctrl</button><button data-k="alt">alt</button>
+      <button data-k="left" aria-label="Left">←</button><button data-k="up" aria-label="Up">↑</button>
+      <button data-k="down" aria-label="Down">↓</button><button data-k="right" aria-label="Right">→</button>
+      <button data-k="ctrl-c">^C</button><button data-k="pipe" data-text="|">|</button>
+      <button data-k="slash" data-text="/">/</button><button data-k="dash" data-text="-">-</button>
+      <button data-k="tilde" data-text="~">~</button>
+      <button data-k="pgup">pgup</button><button data-k="pgdn">pgdn</button>
+      <button data-k="select">select</button><button data-k="paste">paste</button>
+      <button data-k="compose">compose</button>
+    </div>
+  </main>
+</div>
+
+<div id="palette" hidden>
+  <div class="box" role="dialog" aria-modal="true" aria-label="Command palette">
+    <input type="text" autocomplete="off" spellcheck="false" autocapitalize="off">
+    <div class="note"></div>
+    <ul></ul>
+  </div>
+</div>
+
+<div id="textview" hidden>
+  <header>
+    <h2></h2>
+    <input type="search" placeholder="Find (Enter)" aria-label="Find text">
+    <button data-copy-sel>Copy selection</button>
+    <button data-copy-all>Copy all</button>
+    <button data-close class="primary">Done</button>
+  </header>
+  <pre tabindex="0"></pre>
+</div>
+
+<div id="modal" hidden></div>
+<div id="toasts" aria-live="polite"></div>
+<script>window.__splash.set(0.15);</script>
+<script src="/main.js" type="module"></script>
+</body>
+</html>

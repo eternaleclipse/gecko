@@ -1,0 +1,10 @@
+/bin/
+/dist/
+web/node_modules/
+web/dist/*
+!web/dist/.keep
+desktop/node_modules/
+desktop/icon.png
+
+# Claude Code
+.claude/

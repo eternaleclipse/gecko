@@ -1,0 +1,10 @@
+{
+  "name": "Gecko",
+  "short_name": "Gecko",
+  "description": "Terminals, tmux, SSH and coding agents across your machines",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#323c35",
+  "theme_color": "#323c35",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

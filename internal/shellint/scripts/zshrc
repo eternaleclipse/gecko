@@ -1,0 +1,18 @@
+ZDOTDIR="$GECKO_USER_ZDOTDIR"
+[[ -r "$ZDOTDIR/.zshrc" ]] && source "$ZDOTDIR/.zshrc"
+# From here on zsh reads .zlogin etc. from your own ZDOTDIR.
+unset __GECKO_ZDOTDIR GECKO_USER_ZDOTDIR
+__gecko_precmd() {
+  local ec=$?
+  print -n "\e]133;D;$ec\a\e]7;file://${HOST}${PWD}\a\e]133;A\a"
+  return $ec
+}
+__gecko_preexec() {
+  local c=${1//\\/\\x5c}
+  c=${c//;/\\x3b}
+  c=${c//$'\n'/\\x0a}
+  print -rn -- $'\e]633;E;'"$c"$'\a\e]133;C\a'
+}
+typeset -ga precmd_functions preexec_functions
+precmd_functions=(__gecko_precmd $precmd_functions)
+preexec_functions+=(__gecko_preexec)

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Gecko
+GenericName=Terminal
+Comment=Terminals, tmux, SSH and coding agents across your machines
+Exec=@BIN@ open
+Icon=gecko
+Terminal=false
+Categories=System;TerminalEmulator;
+Keywords=terminal;shell;ssh;tmux;agent;claude;
+StartupWMClass=gecko

@@ -1,0 +1,11 @@
+# AppArmor profile for the Gecko desktop app (Electron). Ubuntu 23.10+
+# restricts unprivileged user namespaces, which Chromium's sandbox needs;
+# this allows them for this one binary, as Ubuntu does for Chrome and
+# VS Code. Installed by `make desktop-sandbox`.
+abi <abi/4.0>,
+include <tunables/global>
+
+profile gecko-desktop @ELECTRON@ flags=(unconfined) {
+  userns,
+  include if exists <local/gecko-desktop>
+}

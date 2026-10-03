@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <clipPath id="c"><rect width="32" height="32" rx="8"/></clipPath>
+  <rect width="32" height="32" rx="8" fill="#19211a"/>
+  <g clip-path="url(#c)">
+    <g transform="translate(16 17.5) scale(1.16) translate(-16.2 -17.3)">
+    <path d="M15.03 20.46L11.72 19.72Q10.63 20.40 10.10 20.30A1.75 2.71 -80.0 0 1 10.71 16.85Q11.24 16.95 12.03 17.96L15.40 18.39Z" fill="#7ccb3a"/>
+    <path d="M11.44 19.74Q11.16 18.71 11.77 17.84" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M10.08 19.62Q9.83 18.48 10.46 17.49" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M8.78 19.21Q8.49 18.24 9.09 17.43" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M14.68 19.57L11.39 15.39Q9.97 15.21 9.58 14.74A1.95 3.02 -40.0 0 1 12.57 12.24Q12.95 12.70 12.89 14.13L16.44 18.09Z" fill="#7ccb3a"/>
+    <path d="M11.12 15.22Q11.66 14.19 12.77 13.84" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M10.05 14.15Q10.69 13.03 11.90 12.60" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M9.23 12.86Q9.71 11.87 10.78 11.57" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M14.92 18.71L14.53 12.24Q13.41 11.22 13.35 10.59A2.05 3.18 -5.0 0 1 17.44 10.23Q17.49 10.87 16.56 12.06L17.31 18.50Z" fill="#7ccb3a"/>
+    <path d="M14.39 11.94Q15.48 11.39 16.65 11.74" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M14.12 10.36Q15.34 9.81 16.65 10.14" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M14.19 8.76Q15.20 8.22 16.30 8.58" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M15.75 18.14L19.08 13.15Q18.79 11.69 19.11 11.16A2.00 3.10 32.0 0 1 22.51 13.28Q22.18 13.81 20.74 14.19L17.71 19.36Z" fill="#7ccb3a"/>
+    <path d="M19.13 12.82Q20.31 13.02 21.01 13.99" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M19.84 11.43Q21.13 11.71 21.94 12.75" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M20.84 10.23Q21.95 10.39 22.59 11.32" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M16.78 18.27L20.85 16.96Q21.46 15.77 21.98 15.58A1.80 2.79 70.0 0 1 23.21 18.96Q22.69 19.15 21.46 18.63L17.50 20.24Z" fill="#7ccb3a"/>
+    <path d="M21.08 16.76Q21.84 17.55 21.76 18.64" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M22.35 16.18Q23.15 17.07 23.11 18.27" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M23.72 15.87Q24.46 16.59 24.36 17.62" stroke="#19211a" stroke-width="0.55" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <ellipse cx="16.4" cy="20.1" rx="4.1" ry="3.6" fill="#7ccb3a"/>
+    <path d="M15.6 21.8C14.799999999999999 25.6 13.7 28.1 11.6 32.6" stroke="#7ccb3a" stroke-width="4.2" stroke-linecap="round" fill="none"/>
+    </g>
+  </g>
+  <circle cx="25.5" cy="6.5" r="5.5" fill="#ff9a3c" stroke="#19211a" stroke-width="1.5"/>
+</svg>
