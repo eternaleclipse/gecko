@@ -13,18 +13,18 @@
   <a href="docs/architecture.md">Architecture</a>
 </p>
 
-<h1 align="center">Gecko</h1>
-
-<p align="center">
-  <b>The terminal for running coding agents across all your machines.</b><br>
-  Sessions that survive anything. Agents you can see at a glance. From your desktop or your phone.
-</p>
-
 <p align="center">
   <img alt="Go" src="https://img.shields.io/badge/Go-1.22+-00ADD8?logo=go&logoColor=white">
   <img alt="Platforms" src="https://img.shields.io/badge/Linux%20%C2%B7%20macOS%20%C2%B7%20Windows-a3be8c">
   <img alt="Mobile" src="https://img.shields.io/badge/phone-PWA-d08770">
   <img alt="Agents" src="https://img.shields.io/badge/agents-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Gemini%20%C2%B7%20Aider-88c0d0">
+</p>
+
+<h1 align="center">Gecko</h1>
+
+<p align="center">
+  <b>The terminal for running coding agents across all your machines.</b><br>
+  Sessions that survive anything. Agents you can see at a glance. From your desktop or your phone.
 </p>
 
 <p align="center">
