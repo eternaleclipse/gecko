@@ -1133,7 +1133,7 @@ html.lcd-light #watchface .lcd { box-shadow: inset 0 0 0 2px #0a0a0a, inset 0 0 
 #watchface .w-time, #watchface .w-sec { position: relative; font: 700 34px/1 "DSEG7 Classic", monospace; }
 #watchface .w-sec { font-size: 20px; }
 #watchface .w-time::before, #watchface .w-sec::before { content: attr(data-ghost); position: absolute; right: 0; color: var(--seg-ghost); }
-#watchface .lcd-screen { position: relative; overflow: hidden; }
+#watchface .lcd-screen { position: relative; overflow: hidden; min-width: 320px; min-height: 120px; } /* until sized in JS */
 #watchface .lcd-screen #stage { position: absolute; inset: 0; background: transparent; }
 html.layout-watch .pane { inset: 0 -14px 0 0 !important; background: transparent !important; box-shadow: none !important; border-radius: 0; }
 html.layout-watch .pane .xterm { padding: 2px 0 0 0; }

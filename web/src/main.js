@@ -638,7 +638,12 @@ class App {
     const caseEl = $('#watchface .case');
     const pane = this.activePane();
     const c = pane?.term._core?._renderService?.dimensions?.css?.cell;
-    if (!c?.width) return;
+    if (!c?.width) {
+      // No tab drawn yet (e.g. starting in this theme): try again shortly.
+      clearTimeout(this.watchRetry);
+      this.watchRetry = setTimeout(() => this.fitWatchSoon(), 100);
+      return;
+    }
     const chromeW = caseEl.offsetWidth - screen.offsetWidth;
     const chromeH = caseEl.offsetHeight - screen.offsetHeight;
     const cs = getComputedStyle(pane.term.element);
@@ -659,6 +664,7 @@ class App {
   // the workspace, the machine, and ALM when an agent needs you.
   renderWatch() {
     if (!this.watchMode) return;
+    if (!$('#watchface .lcd-screen').style.width) this.fitWatchSoon(); // first tab just arrived
     const w = $('#watchface');
     const tabs = this.tabsOf(this.ws);
     const nums = this.tabNumbers();
