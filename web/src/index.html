@@ -62,6 +62,19 @@ window.__splash = (function () {
       <span>Gecko</span>
       <span id="conn" class="conn" role="status"></span>
     </header>
+    <div id="watch" aria-hidden="true">
+      <div class="w-print w-top"><span class="w-blue">ALARM</span> <span class="w-blue">CHRONOGRAPH</span></div>
+      <div class="w-lcd">
+        <span class="w-day">--</span><span class="w-date">--</span>
+        <span class="w-time" data-ghost="88:88">--:--</span><span class="w-sec" data-ghost="88">--</span>
+      </div>
+      <div class="w-print w-bottom"><span class="w-yellow">WATER</span> <span class="w-red">WR</span> <span class="w-yellow">RESIST</span></div>
+      <div class="w-pushers">
+        <button data-watch="light" tabindex="-1">LIGHT</button>
+        <button data-watch="mode" tabindex="-1">MODE</button>
+        <button data-watch="alarm" tabindex="-1">ALARM</button>
+      </div>
+    </div>
     <div id="side-body"></div>
     <footer>
       <button id="palette-btn" title="Search tabs, tab contents, agents and commands"><span>Search</span><kbd></kbd></button>

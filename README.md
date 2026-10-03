@@ -31,7 +31,9 @@ machines at once, from a desktop or a phone.
   is already in a tab goes to that tab instead of opening another one. tmux
   inside a plain ssh tab is recognised from its status bar.
 - **Themes.** A green take on Nord by default, plus Mission Control (a
-  launch-webcast skin with DIN-style type), photo themes that bring their own
+  launch-webcast skin with DIN-style type), Digital Watch (a total overhaul in
+  the spirit of a classic resin digital watch: LCD terminal, ticking 7-segment
+  face, LIGHT / MODE / ALARM pushers), photo themes that bring their own
   fonts and shapes (Sakura, Cyberpunk, Neo-Tokyo, Dirt Bike, Summit, Wood Shop,
   Ramen, Mt. Fuji, Jellyfish; CC0 photos, credits in
   `web/public/themes/CREDITS.md`) and the classics (Dracula, Nord, Tokyo Night, Catppuccin, One
@@ -196,7 +198,7 @@ The mobile layout has:
 
 Type `?` in the palette to list every shortcut. **Change Theme** in the
 palette previews themes live: Gecko (a green take on Nord, following the system's
-light or dark mode), Gecko Dark and Light, Mission Control, the photo themes
+light or dark mode), Gecko Dark and Light, Mission Control, Digital Watch, the photo themes
 (Sakura, Cyberpunk, Neo-Tokyo, Dirt Bike, Summit, Wood Shop, Ramen, Mt. Fuji,
 Jellyfish), Dracula, Nord, Tokyo Night, Catppuccin, One Dark,
 Gruvbox, Solarized and GitHub Light. Like all settings, the theme is saved in

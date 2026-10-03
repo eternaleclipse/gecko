@@ -26,6 +26,7 @@ import '@fontsource/ibm-plex-mono/latin-600.css';
 import '@fontsource/m-plus-rounded-1c/latin-500.css';
 import '@fontsource/m-plus-rounded-1c/latin-700.css';
 import '@fontsource/mochiy-pop-one/latin-400.css';
+import '@fontsource/vt323/latin-400.css'; // Digital Watch LCD
 import './style.css';
 import qrcode from 'qrcode-generator';
 
@@ -556,6 +557,38 @@ class App {
     await this.attachTmux(host, index == null ? name : `${name}:${index}`);
   }
 
+  // Digital Watch theme: the 7-segment face ticks, and its pushers work:
+  // LIGHT lights the LCD for a few seconds, MODE cycles workspaces, ALARM
+  // goes to the agent that needs you.
+  bindWatch() {
+    const root = document.documentElement;
+    const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+    const w = $('#watch');
+    const tick = () => {
+      if (!root.classList.contains('skin-casio')) return;
+      const d = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      w.querySelector('.w-day').textContent = days[d.getDay()];
+      w.querySelector('.w-date').textContent = String(d.getDate());
+      w.querySelector('.w-time').textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      w.querySelector('.w-sec').textContent = pad(d.getSeconds());
+    };
+    tick();
+    setInterval(tick, 1000);
+    let lightTimer = 0;
+    w.addEventListener('click', (ev) => {
+      const b = ev.target.closest('[data-watch]');
+      if (!b) return;
+      if (b.dataset.watch === 'light') {
+        root.classList.add('lcd-light');
+        clearTimeout(lightTimer);
+        lightTimer = setTimeout(() => root.classList.remove('lcd-light'), 3000);
+      }
+      if (b.dataset.watch === 'mode') this.cycleWorkspace(1);
+      if (b.dataset.watch === 'alarm') this.nextAgentNeedingYou();
+    });
+  }
+
   // Single click acts after a short wait; a second click on the same thing
   // within it is a double click instead (so renaming never opens a tab).
   clickOrDouble(key, single, double) {
@@ -648,7 +681,7 @@ class App {
     save(k, v);
     if (k === 'theme' || k === 'opacity') this.applyTheme();
     if (k === 'optionIsMeta') for (const p of this.panes.values()) p.term.options.macOptionIsMeta = v;
-    if (k === 'fontSize' || k === 'mobileFontSize') for (const p of this.panes.values()) p.setFontSize(this.fontSize());
+    if (k === 'fontSize' || k === 'mobileFontSize') for (const p of this.panes.values()) p.setFontSize(this.termFontSize());
     if (k === 'sidebarHidden') {
       document.body.classList.toggle('side-hidden', !!v);
       this.activePane()?.layout(true);
@@ -688,9 +721,20 @@ class App {
     return this.touch ? this.settings.mobileFontSize : this.settings.fontSize;
   }
 
+  // The terminal's font size: the person's size, scaled for themes whose
+  // terminal font draws small (e.g. a pixel font).
+  termFontSize() {
+    return Math.round(this.fontSize() * (this.termScale || 1));
+  }
+
   applyTheme(id = this.settings.theme, opacity = this.opacity()) {
     const theme = resolveTheme(id);
     this.termTheme = paintTheme(theme, opacity);
+    const scale = theme.termSize || 1;
+    if (scale !== (this.termScale || 1)) {
+      this.termScale = scale;
+      for (const p of this.panes?.values() || []) p.setFontSize(this.termFontSize());
+    }
     this.setTermFont(theme.termFont || FONT);
     for (const p of this.panes?.values() || []) p.setTheme(this.termTheme);
   }
@@ -803,7 +847,7 @@ class App {
     if (this.termFontWanted === f) return;
     this.termFontWanted = f;
     const first = f.split(',')[0].trim();
-    try { await document.fonts.load(`${this.fontSize()}px ${first}`); } catch {}
+    try { await document.fonts.load(`${this.termFontSize()}px ${first}`); } catch {}
     if (this.termFontWanted !== f) return; // changed again meanwhile
     this.termFont = f; // new terminals use it from now on
     for (const p of this.panes?.values() || []) p.setFontFamily(f);
@@ -1278,6 +1322,7 @@ class App {
       if (el.dataset.act === 'template') this.openTemplate(el.dataset.name);
     });
     this.keepTerminalFocus();
+    this.bindWatch();
     this.bindKeybar();
     this.bindCompose();
     this.bindPalette();
@@ -1395,7 +1440,7 @@ class App {
     el.className = 'pane';
     el.style.visibility = 'hidden';
     $('#panes').appendChild(el);
-    const t = new Terminal({ fontFamily: this.termFont || FONT, fontSize: this.fontSize(), lineHeight: 1.15, scrollback: 1 });
+    const t = new Terminal({ fontFamily: this.termFont || FONT, fontSize: this.termFontSize(), lineHeight: 1.15, scrollback: 1 });
     try {
       t.open(el);
       // Same renderer as real tabs: WebGL snaps cells to whole pixels.

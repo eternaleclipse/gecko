@@ -36,7 +36,7 @@ export class Pane {
       allowProposedApi: true,
       allowTransparency: true, // see-through desktop app and picture themes
       fontFamily: app.termFont || FONT,
-      fontSize: app.fontSize(),
+      fontSize: app.termFontSize(),
       lineHeight: 1.15,
       scrollback: 20000,
       cursorBlink: true,

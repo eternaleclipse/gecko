@@ -139,6 +139,21 @@ export const THEMES = [
       ['#5e3a2c', '#f06a75', '#afe095', '#f7cb72', '#98c1e8', '#eca2c4', '#95dad6', '#ffffff']),
   },
   {
+    // Digital Watch: a total UI overhaul in the spirit of a classic resin
+    // digital watch (skin-casio in style.css): black resin case, brushed
+    // band, a grey-green LCD terminal with pixel type, a 7-segment watch face
+    // with LIGHT / MODE / ALARM pushers, and the watch's printed label colors.
+    // `lcd`: the terminal is drawn on a CSS LCD (it can light up).
+    id: 'digital-watch', name: 'Digital Watch', dark: true, skin: 'casio', lcd: true,
+    accent: '#f2c230', need: '#e0473c', brand: '#f2c230',
+    termFont: '"VT323", ui-monospace, monospace',
+    termSize: 1.45, // VT323 draws small; scale the terminal font up
+    ui: { bg: '#141414', text: '#e8e8e8', panel: '#181818', raise: '#2a2a2a', line: '#3a3a3a', muted: '#a8a8a8', faint: '#6c6c6c', idle: '#a8a8a8' },
+    term: ansi('#b4bea0', '#121a10',
+      ['#121a10', '#8a1f14', '#2a5418', '#6b5200', '#1d3f7a', '#6b2a6b', '#1d5a5a', '#3d4637'],
+      ['#3d4637', '#a8281b', '#367020', '#8a6a00', '#2a54a0', '#8a3a8a', '#267575', '#000000']),
+  },
+  {
     id: 'dracula', name: 'Dracula', dark: true, accent: '#bd93f9', need: '#ffb86c',
     term: ansi('#282a36', '#f8f8f2',
       ['#21222c', '#ff5555', '#50fa7b', '#f1fa8c', '#bd93f9', '#ff79c6', '#8be9fd', '#f8f8f2'],
@@ -224,11 +239,11 @@ export function uiTokens(s) {
   const bg = s.term.background, fg = s.term.foreground;
   const k = s.dark ? 1 : 1.3;
   return {
-    bg,
+    bg: s.ui?.bg ?? bg,
     panel: s.ui?.panel ?? mix(bg, fg, 0.04 * k),
     raise: s.ui?.raise ?? mix(bg, fg, 0.09 * k),
     line: s.ui?.line ?? mix(bg, fg, 0.15 * k),
-    text: fg,
+    text: s.ui?.text ?? fg,
     muted: s.ui?.muted ?? mix(bg, fg, 0.62),
     faint: s.ui?.faint ?? mix(bg, fg, 0.42),
     accent: s.accent,
@@ -280,7 +295,7 @@ export function paintTheme(s, opacity = 1) {
   const fg = s.term.foreground;
   return {
     ...s.term,
-    background: opacity < 1 || s.image ? '#00000000' : s.term.background,
+    background: opacity < 1 || s.image || s.lcd ? '#00000000' : s.term.background,
     cursor: s.accent,
     cursorAccent: s.term.background,
     selectionBackground: s.accent + '4d',
