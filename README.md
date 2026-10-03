@@ -28,7 +28,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/img/hero.png" alt="Gecko with workspaces on two machines, Claude Code working and Codex waiting for approval in the agent dock">
+  <img src="docs/img/hero.png" alt="Gecko in the Nord theme with workspaces on two machines, Claude Code working and Codex waiting for approval in the agent dock">
 </p>
 
 ```sh
