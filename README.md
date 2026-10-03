@@ -192,8 +192,8 @@ The mobile layout has:
 | Show / hide workspaces sidebar | ⌘B | Ctrl+Shift+B |
 | Fullscreen (hold Esc to leave) | ⌃⌘F | F11 |
 
-Type `?` in the palette to list every shortcut. **Theme…** in the palette
-previews themes live: Gecko (a green take on Nord, following the system's
+Type `?` in the palette to list every shortcut. **Change Theme** in the
+palette previews themes live: Gecko (a green take on Nord, following the system's
 light or dark mode), Gecko Dark and Light, Mission Control, Mt. Fuji and
 Jellyfish (with pictures), Dracula, Nord, Tokyo Night, Catppuccin, One Dark,
 Gruvbox, Solarized and GitHub Light. Like all settings, the theme is saved in

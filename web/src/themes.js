@@ -55,22 +55,23 @@ export const THEMES = [
       ['#4a4e55', '#ff7a6b', '#b2e3bd', '#f7d27f', '#80bdff', '#d0b2ff', '#8fe3f0', '#ffffff']),
   },
   {
-    // Picture themes: the image fills the window; the terminal sits on a
-    // veil of the background color (veil = its opacity) so text stays crisp.
-    id: 'mt-fuji', name: 'Mt. Fuji', dark: true, image: '/themes/fuji.svg', veil: 0.72,
-    accent: '#f2a07b', need: '#ffd27a', brand: '#f6cf9f',
-    ui: { panel: '#1b1f3d', raise: '#2a2f55', line: '#363c68', muted: '#a8a3c2', faint: '#726d93', idle: '#a8a3c2' },
-    term: ansi('#141832', '#ece8f3',
-      ['#2a2f55', '#ef7a85', '#a6d6a0', '#f4c88a', '#8aa7f0', '#c79ae8', '#84d0d8', '#d9d5e6'],
-      ['#5a5f8a', '#f799a2', '#c0e5bb', '#f8d9a8', '#a9bff5', '#d8b5ef', '#a5dfe5', '#ffffff']),
+    // Picture themes: a CC0 photo fills the window (see public/themes/CREDITS.md);
+    // the terminal is see-through over it. `veil` is the default opacity of
+    // the theme color laid over the photo (the person can change it).
+    id: 'mt-fuji', name: 'Mt. Fuji', dark: true, image: '/themes/fuji.jpg', position: 'center 38%', veil: 0.6,
+    accent: '#f5a8a0', need: '#ffd27a', brand: '#f5c4b0',
+    ui: { panel: '#1a2140', raise: '#2a3258', line: '#384170', muted: '#aab0cc', faint: '#737a9c', idle: '#aab0cc' },
+    term: ansi('#121935', '#eef0f7',
+      ['#2a3258', '#f2838c', '#a9d8a8', '#f6cb8f', '#8fb0f2', '#d0a2e6', '#8ad3dc', '#dcdfee'],
+      ['#5b6390', '#f8a2a9', '#c3e7c1', '#f9dcaf', '#aec6f6', '#e0bff0', '#abe2e8', '#ffffff']),
   },
   {
-    id: 'jellyfish', name: 'Jellyfish', dark: true, image: '/themes/jellyfish.svg', veil: 0.7,
-    accent: '#6fe3ea', need: '#ff86c8', brand: '#ffb0e6',
-    ui: { panel: '#062033', raise: '#0d3048', line: '#153d57', muted: '#8fb6c2', faint: '#5a7f8d', idle: '#8fb6c2' },
-    term: ansi('#041627', '#dff6f8',
-      ['#0d3048', '#ff7a90', '#7ee0b0', '#f2d98a', '#6fb6ff', '#e59af0', '#6fe3ea', '#cfe6ec'],
-      ['#3f6a80', '#ff9db0', '#a4ecc9', '#f7e5ae', '#98caff', '#efbaf5', '#9ceff3', '#ffffff']),
+    id: 'jellyfish', name: 'Jellyfish', dark: true, image: '/themes/jellyfish.jpg', position: '30% center', veil: 0.55,
+    accent: '#f5b45e', need: '#ff7f73', brand: '#f5b45e',
+    ui: { panel: '#06222c', raise: '#0d3442', line: '#164252', muted: '#93b9c2', faint: '#5d828d', idle: '#93b9c2' },
+    term: ansi('#041b24', '#e2f3f5',
+      ['#0d3442', '#ff7f73', '#7fdcb0', '#f5c56e', '#6fb3e8', '#d99ae6', '#68d8de', '#cfe4e8'],
+      ['#3f6a78', '#ffa197', '#a5eacb', '#f8d696', '#98c8ef', '#e7b9ef', '#95e6ea', '#ffffff']),
   },
   {
     id: 'dracula', name: 'Dracula', dark: true, accent: '#bd93f9', need: '#ffb86c',
@@ -179,7 +180,7 @@ function alpha(c, a) {
 
 // Applies a theme to the page and returns the matching xterm.js theme.
 // opacity < 1 (desktop app only) makes the big surfaces see-through.
-export function paintTheme(s, opacity = 1) {
+export function paintTheme(s, opacity = 1, veil = null) {
   const root = document.documentElement;
   const ui = uiTokens(s);
   for (const [k, v] of Object.entries(ui)) root.style.setProperty('--' + k, v);
@@ -200,7 +201,8 @@ export function paintTheme(s, opacity = 1) {
   root.classList.toggle('has-image', !!s.image);
   if (s.image) {
     root.style.setProperty('--bg-image', `url("${s.image}")`);
-    root.style.setProperty('--veil', alpha(ui.bg, s.veil ?? 0.72));
+    root.style.setProperty('--bg-position', s.position || 'center');
+    root.style.setProperty('--veil', alpha(ui.bg, veil ?? s.veil ?? 0.7));
     root.style.setProperty('--surface-term', 'transparent');
   } else {
     root.style.removeProperty('--bg-image');
