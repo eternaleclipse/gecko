@@ -27,6 +27,7 @@ import '@fontsource/m-plus-rounded-1c/latin-500.css';
 import '@fontsource/m-plus-rounded-1c/latin-700.css';
 import '@fontsource/mochiy-pop-one/latin-400.css';
 import '@fontsource/vt323/latin-400.css'; // Digital Watch LCD
+import '@fontsource/michroma/latin-400.css'; // Digital Watch face printing
 import './style.css';
 import qrcode from 'qrcode-generator';
 
