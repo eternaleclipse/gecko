@@ -45,7 +45,7 @@ export class Pane {
       macOptionClickForcesSelection: true,
       rightClickSelectsWord: !isMac,
       drawBoldTextInBrightColors: false,
-      minimumContrastRatio: 1.1,
+      minimumContrastRatio: app.termContrast || 1.1,
       smoothScrollDuration: 0,
       theme: app.termTheme,
     });
@@ -166,6 +166,7 @@ export class Pane {
       if (off < this.offset) data = data.subarray(this.offset - off);
     }
     this.offset = off + data.length;
+    if (this.app.noDim) data = undim(data);
     if (off < this.replayUntil) {
       this.muted++;
       this.term.write(data, () => this.muted--);
@@ -210,4 +211,36 @@ export class Pane {
     this.term.dispose();
     this.el.remove();
   }
+}
+
+// Turns SGR 2 (dim) into SGR 6 (which xterm ignores) in CSI ... m sequences,
+// in place on a copy, for themes where half-transparent text is unreadable
+// (a light LCD). Color arguments (38;5;n, 38;2;r;g;b and the like) are
+// skipped so a 2 there stays a color.
+export function undim(data) {
+  let out = data;
+  for (let i = 0; i + 2 < data.length; i++) {
+    if (data[i] !== 0x1b || data[i + 1] !== 0x5b) continue;
+    let j = i + 2;
+    while (j < data.length && ((data[j] >= 0x30 && data[j] <= 0x39) || data[j] === 0x3b || data[j] === 0x3a)) j++;
+    if (j >= data.length || data[j] !== 0x6d) continue;
+    // Walk the ;-separated parameters between i+2 and j.
+    let skip = 0, start = i + 2;
+    for (let k = i + 2; k <= j; k++) {
+      if (k < j && data[k] !== 0x3b) continue;
+      const len = k - start;
+      if (skip > 0) skip--;
+      else if (len === 2 && (data[start] === 0x33 || data[start] === 0x34 || data[start] === 0x35) && data[start + 1] === 0x38) {
+        // 38/48/58: next is 5 (one more) or 2 (three more)
+        const n = k + 1 < j ? data[k + 1] : 0;
+        skip = n === 0x35 ? 2 : n === 0x32 ? 4 : 1;
+      } else if (len === 1 && data[start] === 0x32) {
+        if (out === data) out = data.slice();
+        out[start] = 0x36;
+      }
+      start = k + 1;
+    }
+    i = j;
+  }
+  return out;
 }

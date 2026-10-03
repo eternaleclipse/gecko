@@ -991,7 +991,7 @@ html.skin-casio #palette input, html.skin-casio .card input {
 html.skin-casio .card input { box-shadow: inset 0 0 0 1px rgb(18 26 16 / 0.4); font-size: 20px; }
 html.skin-casio #palette input::placeholder, html.skin-casio .card input::placeholder { color: rgb(18 26 16 / 0.45); }
 html.skin-casio #palette li { font: 19px/1.1 var(--pixel); color: var(--seg); border-radius: 2px; }
-html.skin-casio #palette li .h, html.skin-casio #palette li .k, html.skin-casio #palette .note { color: rgb(18 26 16 / 0.62); font-family: var(--pixel); font-size: 16px; }
+html.skin-casio #palette li .h, html.skin-casio #palette li .k, html.skin-casio #palette .note { color: rgb(18 26 16 / 0.8); font-family: var(--pixel); font-size: 16px; }
 html.skin-casio #palette li .k { text-transform: uppercase; }
 html.skin-casio #palette li.sel { background: var(--seg); }
 html.skin-casio #palette li.sel .l, html.skin-casio #palette li.sel .h, html.skin-casio #palette li.sel .k { color: var(--lcd); }
@@ -1073,7 +1073,7 @@ html.lcd-light #watchface .lcd { box-shadow: inset 0 3px 8px rgb(0 0 0 / 0.3), 0
 #watchface .w-day { font: 700 16px/1 "DSEG14 Classic", monospace; }
 #watchface .w-date { font: 700 16px/1 "DSEG7 Classic", monospace; }
 #watchface .w-tabs { flex: 1; display: flex; gap: 4px; justify-content: center; }
-#watchface .w-tabs b { font: 700 13px/1 "DSEG7 Classic", monospace; padding: 3px 4px; border-radius: 2px; opacity: 0.45; }
+#watchface .w-tabs b { font: 700 13px/1 "DSEG7 Classic", monospace; padding: 3px 4px; border-radius: 2px; opacity: 0.6; }
 #watchface .w-tabs b.on { opacity: 1; background: var(--seg); color: var(--lcd); }
 #watchface .w-tabs b.need { opacity: 1; animation: lcd-blink 1s steps(1) infinite; }
 #watchface .w-time, #watchface .w-sec { position: relative; font: 700 34px/1 "DSEG7 Classic", monospace; }

@@ -583,9 +583,14 @@ class App {
       if (!b) return;
       const act = b.dataset.watch;
       if (act === 'light') {
-        root.classList.add('lcd-light');
+        const lit = (on) => {
+          root.classList.toggle('lcd-light', on);
+          const t = on ? { ...this.termTheme, background: '#8fe3cf' } : this.termTheme;
+          for (const p of this.panes.values()) p.setTheme(t);
+        };
+        lit(true);
         clearTimeout(lightTimer);
-        lightTimer = setTimeout(() => root.classList.remove('lcd-light'), 3000);
+        lightTimer = setTimeout(() => lit(false), 3000);
       }
       if (act === 'mode') this.cycleTab(1);
       if (act === 'search') this.openPalette();
@@ -814,7 +819,9 @@ class App {
       for (const p of this.panes?.values() || []) p.setFontSize(this.termFontSize());
     }
     this.setTermFont(theme.termFont || FONT);
-    for (const p of this.panes?.values() || []) p.setTheme(this.termTheme);
+    this.termContrast = theme.contrast || 1.1;
+    this.noDim = !!theme.noDim;
+    for (const p of this.panes?.values() || []) { p.setTheme(this.termTheme); p.term.options.minimumContrastRatio = this.termContrast; }
     if (this.panes) this.setWatchLayout(theme.layout === 'watch');
     if (this.watchMode) this.fitWatchSoon();
   }
