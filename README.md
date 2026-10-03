@@ -2,6 +2,17 @@
   <img src="packaging/linux/gecko.svg" width="88" alt="Gecko logo">
 </p>
 
+<p align="center">
+  <a href="docs/features.md">Features</a> ·
+  <a href="docs/install.md">Install</a> ·
+  <a href="docs/machines.md">Machines</a> ·
+  <a href="docs/mobile.md">Phone</a> ·
+  <a href="docs/themes.md">Themes</a> ·
+  <a href="docs/keyboard.md">Keyboard</a> ·
+  <a href="docs/config.md">Config</a> ·
+  <a href="docs/architecture.md">Architecture</a>
+</p>
+
 <h1 align="center">Gecko</h1>
 
 <p align="center">
@@ -18,14 +29,3 @@ git clone https://github.com/eternaleclipse/gecko && cd gecko
 make install      # needs Go 1.22+ and Node 18+
 gecko             # starts the daemon and opens the app
 ```
-
-<p align="center">
-  <a href="docs/features.md">Features</a> ·
-  <a href="docs/install.md">Install</a> ·
-  <a href="docs/machines.md">Machines</a> ·
-  <a href="docs/mobile.md">Phone</a> ·
-  <a href="docs/themes.md">Themes</a> ·
-  <a href="docs/keyboard.md">Keyboard</a> ·
-  <a href="docs/config.md">Config</a> ·
-  <a href="docs/architecture.md">Architecture</a>
-</p>
