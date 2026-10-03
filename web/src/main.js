@@ -30,7 +30,7 @@ function initialTheme() {
 
 // Settings saved in ~/.gecko-terminal/settings.json (the rest of what the
 // browser stores is per-window state, like which tab is open).
-const SYNCED = ['theme', 'opacity', 'veil', 'fontSize', 'mobileFontSize', 'copyOnSelect', 'smartCopy', 'optionIsMeta', 'renderer', 'sidebarHidden', 'keys'];
+const SYNCED = ['theme', 'opacity', 'fontSize', 'mobileFontSize', 'copyOnSelect', 'smartCopy', 'optionIsMeta', 'renderer', 'sidebarHidden', 'keys'];
 
 // Protocol version this client speaks; see internal/proto.
 const PROTOCOL = 6;
@@ -145,7 +145,6 @@ class App {
       theme: initialTheme(),
       renderer: store('renderer', 'auto'), // auto | webgl | dom
       opacity: store('opacity', 0.9), // desktop app background opacity
-      veil: store('veil', null), // picture themes: terminal opacity over the photo (null = the theme's default)
       sidebarHidden: store('sidebarHidden', false),
       keys: store('keys', {}), // key binding overrides
     };
@@ -625,7 +624,7 @@ class App {
     if (JSON.stringify(this.settings[k]) === JSON.stringify(v)) return;
     this.settings[k] = v;
     save(k, v);
-    if (k === 'theme' || k === 'opacity' || k === 'veil') this.applyTheme();
+    if (k === 'theme' || k === 'opacity') this.applyTheme();
     if (k === 'optionIsMeta') for (const p of this.panes.values()) p.term.options.macOptionIsMeta = v;
     if (k === 'fontSize' || k === 'mobileFontSize') for (const p of this.panes.values()) p.setFontSize(this.fontSize());
     if (k === 'sidebarHidden') {
@@ -667,8 +666,8 @@ class App {
     return this.touch ? this.settings.mobileFontSize : this.settings.fontSize;
   }
 
-  applyTheme(id = this.settings.theme, opacity = this.opacity(), veil = this.settings.veil) {
-    this.termTheme = paintTheme(resolveTheme(id), opacity, veil);
+  applyTheme(id = this.settings.theme, opacity = this.opacity()) {
+    this.termTheme = paintTheme(resolveTheme(id), opacity);
     for (const p of this.panes?.values() || []) p.setTheme(this.termTheme);
   }
 
@@ -779,41 +778,19 @@ class App {
     return this.desktop?.transparent ? this.settings.opacity : 1;
   }
 
+  // Opacity of the whole window over the desktop (desktop app only): the
+  // background, picture themes' photo included. Text stays solid.
   openOpacityPicker() {
-    const theme = resolveTheme(this.settings.theme);
-    if (theme.image) {
-      // How see-through the terminal is over the photo.
-      const before = this.settings.veil;
-      const def = theme.veil ?? 0.7;
-      const values = [null, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3];
-      const items = values.map((v) => {
-        const o = v ?? def;
-        return {
-          kind: v === before ? 'Current' : 'Opacity',
-          label: v == null ? `Theme default (${Math.round(def * 100)}%)` : `${Math.round(v * 100)}%`,
-          hint: o >= 0.85 ? 'The photo barely shows' : o >= 0.65 ? 'A hint of the photo' : o >= 0.45 ? 'Clearly see-through' : 'Mostly photo; text can get harder to read',
-          value: v,
-          run: () => this.setSetting('veil', v),
-        };
-      });
-      return this.openPalette('', {
-        placeholder: `Background opacity over the ${theme.name} photo`,
-        items,
-        select: Math.max(0, values.indexOf(before)),
-        onSelect: (item) => item && this.applyTheme(this.settings.theme, this.opacity(), item.value),
-        onCancel: () => this.applyTheme(),
-      });
-    }
     const before = this.settings.opacity;
     const items = [1, 0.95, 0.9, 0.85, 0.8, 0.75, 0.7, 0.6, 0.5].map((o) => ({
       kind: Math.abs(o - before) < 0.001 ? 'Current' : 'Opacity',
       label: o === 1 ? 'Solid' : `${Math.round(o * 100)}%`,
-      hint: o === 1 ? 'No transparency' : o >= 0.85 ? 'A hint of the desktop behind' : o >= 0.7 ? 'Clearly see-through' : 'Very see-through',
+      hint: o === 1 ? 'No transparency' : o >= 0.85 ? 'A hint of the desktop behind the window' : o >= 0.7 ? 'The desktop clearly shows through' : 'Very see-through',
       value: o,
       run: () => this.setSetting('opacity', o),
     }));
     this.openPalette('', {
-      placeholder: 'Background opacity',
+      placeholder: 'Window opacity over the desktop',
       items,
       select: items.findIndex((i) => Math.abs(i.value - before) < 0.001),
       onSelect: (item) => item && this.applyTheme(this.settings.theme, item.value),
@@ -1713,12 +1690,8 @@ class App {
     if (isMac) add(`Option key as Meta: ${this.settings.optionIsMeta ? 'on' : 'off'}`, 'Toggle', () => this.setSetting('optionIsMeta', !this.settings.optionIsMeta), 'Setting');
     const cur0 = this.settings.theme === AUTO ? 'Gecko (follows system)' : resolveTheme(this.settings.theme).name;
     add('Change Theme', `Now: ${cur0}`, () => this.openThemePicker(), 'Setting', undefined, 'switch change theme themes colors colours color scheme palette appearance dark light mode background wallpaper skin');
-    const curTheme = resolveTheme(this.settings.theme);
-    if (curTheme.image) {
-      const v = this.settings.veil ?? curTheme.veil ?? 0.7;
-      add('Background opacity…', `Now: ${Math.round(v * 100)}% over the photo`, () => this.openOpacityPicker(), 'Setting', undefined, 'transparency transparent see-through photo picture veil alpha');
-    } else if (this.desktop?.transparent) {
-      add('Background opacity…', `Now: ${this.settings.opacity >= 1 ? 'solid' : Math.round(this.settings.opacity * 100) + '%'}`, () => this.openOpacityPicker(), 'Setting', undefined, 'transparency transparent see-through blur glass alpha');
+    if (this.desktop?.transparent) {
+      add('Background opacity…', `Now: ${this.settings.opacity >= 1 ? 'solid' : Math.round(this.settings.opacity * 100) + '%'} over the desktop`, () => this.openOpacityPicker(), 'Setting', undefined, 'transparency transparent see-through blur glass alpha window opacity');
     }
     const gl = this.settings.renderer === 'webgl' || (this.settings.renderer === 'auto' && !this.touch);
     add(`Renderer: ${gl ? 'WebGL' : 'DOM'}`, `Switch to ${gl ? 'DOM (most compatible)' : 'WebGL (fastest)'}; reloads the page`, () => {

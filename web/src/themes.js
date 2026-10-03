@@ -55,9 +55,9 @@ export const THEMES = [
       ['#4a4e55', '#ff7a6b', '#b2e3bd', '#f7d27f', '#80bdff', '#d0b2ff', '#8fe3f0', '#ffffff']),
   },
   {
-    // Picture themes: a CC0 photo fills the window (see public/themes/CREDITS.md);
-    // the terminal is see-through over it. `veil` is the default opacity of
-    // the theme color laid over the photo (the person can change it).
+    // Picture themes: a CC0 photo fills the window (see public/themes/CREDITS.md).
+    // `veil` is how strongly the theme color tints the photo under the
+    // terminal, so text stays readable.
     id: 'mt-fuji', name: 'Mt. Fuji', dark: true, image: '/themes/fuji.jpg', position: 'center 38%', veil: 0.6,
     accent: '#f5a8a0', need: '#ffd27a', brand: '#f5c4b0',
     ui: { panel: '#1a2140', raise: '#2a3258', line: '#384170', muted: '#aab0cc', faint: '#737a9c', idle: '#aab0cc' },
@@ -180,7 +180,7 @@ function alpha(c, a) {
 
 // Applies a theme to the page and returns the matching xterm.js theme.
 // opacity < 1 (desktop app only) makes the big surfaces see-through.
-export function paintTheme(s, opacity = 1, veil = null) {
+export function paintTheme(s, opacity = 1) {
   const root = document.documentElement;
   const ui = uiTokens(s);
   for (const [k, v] of Object.entries(ui)) root.style.setProperty('--' + k, v);
@@ -202,7 +202,10 @@ export function paintTheme(s, opacity = 1, veil = null) {
   if (s.image) {
     root.style.setProperty('--bg-image', `url("${s.image}")`);
     root.style.setProperty('--bg-position', s.position || 'center');
-    root.style.setProperty('--veil', alpha(ui.bg, veil ?? s.veil ?? 0.7));
+    root.style.setProperty('--veil', alpha(ui.bg, s.veil ?? 0.7));
+    root.style.setProperty('--side-tint', alpha(ui.panel, 0.5));
+    // The window's opacity over the desktop applies to the photo too.
+    root.style.setProperty('--win-opacity', String(opacity));
     root.style.setProperty('--surface-term', 'transparent');
   } else {
     root.style.removeProperty('--bg-image');

@@ -682,15 +682,27 @@ html.skin-mission .logo { filter: grayscale(1) brightness(1.7) contrast(1.1); }
 
 /* ------------------------------------------------------------ picture themes
 
-   The picture fills the window; the sidebar is frosted glass over it and
-   the terminal area sits on a veil of the theme color, so text stays crisp. */
+   The photo fills the window. The sidebar and the main area each draw it as
+   one layer together with their tint (sidebar: frosted, main: a veil so the
+   terminal stays readable). Only that layer fades with the window opacity
+   (desktop app), so "80%" means the whole background, photo included, is
+   exactly 80% opaque over the desktop. Text and controls stay solid. */
 
-html.has-image body { background: var(--bg) var(--bg-image) var(--bg-position, center) / cover no-repeat; }
-html.has-image #side {
-  background: color-mix(in srgb, var(--panel) 62%, transparent);
-  -webkit-backdrop-filter: blur(22px) saturate(1.3); backdrop-filter: blur(22px) saturate(1.3);
+html.has-image:not(.desktop), html.has-image:not(.desktop) body { background: var(--bg); }
+html.has-image.desktop body { background: transparent; }
+html.has-image #side, html.has-image #main {
+  position: relative; isolation: isolate; overflow: hidden; background: transparent !important;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
 }
-html.has-image #main { background: var(--veil); }
+html.has-image #side::before, html.has-image #main::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  opacity: var(--win-opacity, 1);
+  background:
+    linear-gradient(var(--tint), var(--tint)),
+    var(--bg-image) var(--bg-position, center) / cover no-repeat fixed;
+}
+html.has-image #main::before { inset: 0; --tint: var(--veil); }
+html.has-image #side::before { inset: -40px; --tint: var(--side-tint); filter: blur(20px) saturate(1.25); }
 html.has-image #tabbar, html.has-image #stage { background: transparent; }
 html.has-image .tab:hover, html.has-image .tab.cur, html.has-image #dock, html.has-image #compose, html.has-image #keybar {
   background: color-mix(in srgb, var(--raise) 55%, transparent);
