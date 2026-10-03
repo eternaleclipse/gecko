@@ -1,7 +1,65 @@
-# Gecko
+<p align="center">
+  <img src="packaging/linux/gecko.svg" width="88" alt="Gecko logo">
+</p>
 
-A terminal for people who run shells, tmux, SSH and coding agents on several
-machines at once, from a desktop or a phone.
+<h1 align="center">Gecko</h1>
+
+<p align="center">
+  <b>The terminal for running coding agents across all your machines.</b><br>
+  Sessions that survive anything. Agents you can see at a glance. From your desktop or your phone.
+</p>
+
+<p align="center">
+  <img alt="Go" src="https://img.shields.io/badge/Go-1.22+-00ADD8?logo=go&logoColor=white">
+  <img alt="Platforms" src="https://img.shields.io/badge/Linux%20%C2%B7%20macOS%20%C2%B7%20Windows-a3be8c">
+  <img alt="Mobile" src="https://img.shields.io/badge/phone-PWA-d08770">
+  <img alt="Agents" src="https://img.shields.io/badge/agents-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Gemini%20%C2%B7%20Aider-88c0d0">
+</p>
+
+<p align="center">
+  <a href="#features">Features</a> ·
+  <a href="#build-and-run">Install</a> ·
+  <a href="#architecture">Architecture</a> ·
+  <a href="#keyboard">Keyboard</a> ·
+  <a href="#config">Config</a>
+</p>
+
+<p align="center">
+  <img src="docs/img/hero.png" alt="Gecko with workspaces on two machines, Claude Code working and Codex waiting for approval in the agent dock">
+</p>
+
+## Why Gecko
+
+- 🛟 **Nothing dies.** A small daemon owns every PTY. Close the window, lose Wi-Fi, switch to your phone, upgrade Gecko itself: shells and agents keep running and every tab resumes from the last byte it saw.
+- 🤖 **Agents at a glance.** Claude Code, Codex, Gemini, Aider and friends are detected on every machine. The agent dock shows who is *working*, who *needs you*, and lets you answer with one tap.
+- 🖥️ **One window, many machines.** Add a host by its SSH destination. Its sessions, tmux windows and agents show up next to your local ones, and reconnect by themselves like mosh.
+- 📱 **Your phone is a first-class client.** Scan a QR code and you get the same sessions with a touch key bar, a compose box for prompts, and push notifications when an agent stops for you.
+
+<table>
+  <tr>
+    <td width="30%" valign="top"><img src="docs/img/phone.png" alt="Gecko on a phone, approving a Codex command from the agent dock"></td>
+    <td valign="top">
+      <img src="docs/img/theme-digital-watch.png" alt="Digital Watch theme: the terminal is the LCD of a resin wristwatch">
+      <img src="docs/img/theme-cyberpunk.jpg" alt="Cyberpunk photo theme">
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><sub>On a phone: approve an agent with one tap</sub></td>
+    <td align="center"><sub>Themes go well beyond colors: Digital Watch, Cyberpunk and 20 more</sub></td>
+  </tr>
+</table>
+
+## Quick start
+
+```sh
+git clone https://github.com/eternaleclipse/gecko && cd gecko
+make install      # needs Go 1.22+ and Node 18+
+gecko             # starts the daemon and opens the app
+```
+
+Then try `gecko new -n claude -- claude`, press <kbd>Ctrl</kbd>+<kbd>K</kbd> for the palette, or **Open on another device** to pick it up on your phone.
+
+## Features
 
 - **Sessions outlive everything.** A small daemon owns every PTY. You can close
   the window, lose Wi-Fi, have SSH or mosh drop, or switch from laptop to phone,
