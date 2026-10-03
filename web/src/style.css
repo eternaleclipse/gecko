@@ -1030,7 +1030,7 @@ html.layout-watch #watchface {
   grid-template-rows: 1fr auto 1fr;
 }
 #watchface .strap {
-  justify-self: center; width: min(46vw, 420px); height: 100%; min-height: 20px;
+  justify-self: center; width: min(58vw, 560px); height: 100%; min-height: 20px;
   background:
     repeating-linear-gradient(180deg, transparent 0 22px, rgb(0 0 0 / 0.55) 22px 24px, rgb(255 255 255 / 0.05) 24px 25px),
     linear-gradient(90deg, #0c0c0c, #232323 18%, #1a1a1a 50%, #232323 82%, #0c0c0c);
@@ -1044,24 +1044,24 @@ html.layout-watch #watchface {
     linear-gradient(90deg, #0c0c0c, #232323 18%, #1a1a1a 50%, #232323 82%, #0c0c0c);
 }
 #watchface .case {
-  position: relative; z-index: 1; padding: 22px 30px 20px;
-  border-radius: 34px 34px 40px 40px / 30px 30px 46px 46px;
+  position: relative; z-index: 1; padding: 18px 34px 18px;
+  border-radius: 40px / 34px;
   background:
     repeating-linear-gradient(0deg, rgb(255 255 255 / 0.014) 0 1px, transparent 1px 3px),
     radial-gradient(130% 100% at 30% 0%, #333 0%, #1a1a1a 40%, #0b0b0b 100%);
   box-shadow: inset 0 2px 0 rgb(255 255 255 / 0.12), inset 0 -3px 6px #000, 0 0 0 2px #000, 0 18px 50px rgb(0 0 0 / 0.75);
 }
 #watchface .bezel {
-  display: grid; gap: 6px; padding: 10px 18px 12px; border-radius: 14px;
-  background: linear-gradient(180deg, #d8d8d8, #9a9a9a 50%, #c6c6c6);
-  box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 #666, 0 0 0 2px #000;
+  display: grid; gap: 7px; padding: 12px 22px 12px; border-radius: 10px 10px 14px 14px;
+  background: linear-gradient(180deg, #1c1c1c, #0e0e0e);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 0 0 2px #000, 0 0 0 3px #3a3a3a;
 }
 #watchface .w-brand { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px; }
-#watchface .w-logo { font: 700 italic 22px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: 0.3em; color: #1a1a1a; text-shadow: 0 1px 0 #eee; }
-#watchface .w-model { font: 700 italic 11px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: 0.22em; color: #b3261e; }
+#watchface .w-logo { font: 700 italic 22px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: 0.3em; color: #e9e9e9; }
+#watchface .w-model { font: 700 italic 11px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: 0.22em; color: #e0473c; }
 #watchface .w-print { display: flex; justify-content: space-between; padding: 0 6px; font: 700 italic 10px/1 "Barlow Semi Condensed", sans-serif; letter-spacing: 0.16em; }
 #watchface .w-print-bottom { justify-content: center; gap: 0.6em; }
-#watchface .w-blue { color: #1f55b0; } #watchface .w-yellow { color: #8a6400; } #watchface .w-red { color: #b3261e; }
+#watchface .w-blue { color: #4f8fe6; } #watchface .w-yellow { color: #f2c230; } #watchface .w-red { color: #e0473c; }
 #watchface .lcd {
   display: grid; padding: 6px 8px 6px; border-radius: 6px; color: var(--seg);
   background: linear-gradient(180deg, var(--lcd-shade), var(--lcd) 8%);
@@ -1079,10 +1079,10 @@ html.lcd-light #watchface .lcd { box-shadow: inset 0 3px 8px rgb(0 0 0 / 0.3), 0
 #watchface .w-time, #watchface .w-sec { position: relative; font: 700 34px/1 "DSEG7 Classic", monospace; }
 #watchface .w-sec { font-size: 20px; }
 #watchface .w-time::before, #watchface .w-sec::before { content: attr(data-ghost); position: absolute; right: 0; color: var(--seg-ghost); }
-#watchface .lcd-screen { position: relative; }
+#watchface .lcd-screen { position: relative; overflow: hidden; }
 #watchface .lcd-screen #stage { position: absolute; inset: 0; background: transparent; }
-html.layout-watch .pane { inset: 0 !important; background: transparent !important; box-shadow: none !important; border-radius: 0; }
-html.layout-watch .pane .xterm { padding: 4px 0 2px 4px; }
+html.layout-watch .pane { inset: 0 -14px 0 0 !important; background: transparent !important; box-shadow: none !important; border-radius: 0; }
+html.layout-watch .pane .xterm { padding: 2px 0 0 0; }
 html.layout-watch .pane .xterm-viewport { scrollbar-width: none; }
 html.layout-watch .pane .xterm-viewport::-webkit-scrollbar { display: none; }
 #watchface .lcd-bottom {

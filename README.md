@@ -32,7 +32,7 @@ machines at once, from a desktop or a phone.
   inside a plain ssh tab is recognised from its status bar.
 - **Themes.** A green take on Nord by default, plus Mission Control (a
   launch-webcast skin with DIN-style type), Digital Watch (the window becomes a
-  resin wristwatch whose LCD is a 40x20 terminal, with a ticking 7-segment
+  resin wristwatch whose wide LCD is a 40x6 terminal, with a ticking 7-segment
   face and working LIGHT / MODE / START·STOP / ALARM pushers), photo themes that bring their own
   fonts and shapes (Sakura, Cyberpunk, Neo-Tokyo, Dirt Bike, Summit, Wood Shop,
   Ramen, Mt. Fuji, Jellyfish; CC0 photos, credits in

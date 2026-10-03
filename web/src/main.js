@@ -57,6 +57,7 @@ const SYNCED = ['theme', 'opacity', 'fontSize', 'mobileFontSize', 'copyOnSelect'
 
 // Protocol version this client speaks; see internal/proto.
 const PROTOCOL = 6;
+const WATCH_COLS = 40, WATCH_ROWS = 6; // the Digital Watch LCD
 const OUTDATED = 'The Gecko background service is older than this window, so some features are missing. Click to restart it.';
 
 const STATUS_TEXT = { working: 'Working', 'needs-input': 'Needs you', idle: 'Idle', running: 'Running' };
@@ -558,7 +559,7 @@ class App {
   }
 
   // Digital Watch theme: the window becomes a wristwatch. The terminal
-  // area moves into the watch's LCD at a fixed 40x20; the 7-segment rows show
+  // area moves into the watch's wide, short LCD at a fixed 40x6; the 7-segment rows show
   // the time, the tabs and an alarm when an agent needs you; the pushers
   // work: LIGHT (backlight), MODE (next tab), START·STOP (search), ALARM.
   bindWatch() {
@@ -625,10 +626,10 @@ class App {
   }
 
   // Pick the LCD font size that lets the whole watch fit the window, then
-  // size the LCD to exactly 40x20 terminal cells.
+  // size the LCD to exactly WATCH_COLS x WATCH_ROWS cells, edge to edge.
   async fitWatch() {
     if (!this.watchMode) return;
-    const COLS = 40, ROWS = 20;
+    const COLS = WATCH_COLS, ROWS = WATCH_ROWS;
     const screen = $('#watchface .lcd-screen');
     const caseEl = $('#watchface .case');
     const cell = (p) => p?.term._core?._renderService?.dimensions?.css?.cell;
@@ -640,21 +641,21 @@ class App {
     const fs0 = pane ? pane.term.options.fontSize : 18;
     const perPxW = c0?.width ? c0.width / fs0 : 0.5;
     const perPxH = c0?.height ? c0.height / fs0 : 1.15;
-    const availH = window.innerHeight - 40 - chromeH;
-    const availW = window.innerWidth - 40 - chromeW;
-    const fs = Math.max(10, Math.min(30, Math.floor(Math.min(availH / (ROWS * perPxH), (availW - 14) / (COLS * perPxW)))));
+    const availH = window.innerHeight * 0.8 - chromeH;
+    const availW = Math.min(window.innerWidth - 60, 1100) - chromeW;
+    const fs = Math.max(10, Math.min(40, Math.floor(Math.min(availH / (ROWS * perPxH), availW / (COLS * perPxW)))));
     this.watchFont = fs;
     for (const p of this.panes.values()) p.term.options.fontSize = fs;
     await new Promise((r) => requestAnimationFrame(r));
     const c = cell(this.activePane());
     if (!c?.width) return;
-    const xt = this.activePane().term.element;
-    const padX = parseInt(getComputedStyle(xt).paddingLeft) + parseInt(getComputedStyle(xt).paddingRight);
-    const padY = parseInt(getComputedStyle(xt).paddingTop) + parseInt(getComputedStyle(xt).paddingBottom);
-    // Half a cell of slack so rounding lands on exactly 40x20; 14px is the
-    // scrollbar allowance xterm's fit reserves.
-    screen.style.width = Math.ceil((COLS + 0.5) * c.width + padX + 14) + 'px';
-    screen.style.height = Math.ceil((ROWS + 0.5) * c.height + padY) + 'px';
+    const cs = getComputedStyle(this.activePane().term.element);
+    const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+    const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    // The pane reaches 14px past the LCD's right edge (hidden), where xterm
+    // keeps its scrollbar gutter, so the text itself fills the LCD.
+    screen.style.width = Math.ceil(COLS * c.width + padX + 0.5) + 'px';
+    screen.style.height = Math.ceil(ROWS * c.height + padY + 0.5) + 'px';
     requestAnimationFrame(() => { for (const p of this.panes.values()) if (p.visible) { p.layout(true); p.sendSize(true); } });
   }
 
