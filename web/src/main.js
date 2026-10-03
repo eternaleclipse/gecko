@@ -57,7 +57,7 @@ const SYNCED = ['theme', 'opacity', 'fontSize', 'mobileFontSize', 'copyOnSelect'
 
 // Protocol version this client speaks; see internal/proto.
 const PROTOCOL = 6;
-const WATCH_COLS = 40, WATCH_ROWS = 6; // the Digital Watch LCD
+const WATCH_MIN_COLS = 20, WATCH_MIN_ROWS = 3; // the Digital Watch LCD
 const OUTDATED = 'The Gecko background service is older than this window, so some features are missing. Click to restart it.';
 
 const STATUS_TEXT = { working: 'Working', 'needs-input': 'Needs you', idle: 'Idle', running: 'Running' };
@@ -559,7 +559,7 @@ class App {
   }
 
   // Digital Watch theme: the window becomes a wristwatch. The terminal
-  // area moves into the watch's wide, short LCD at a fixed 40x6; the 7-segment rows show
+  // area moves into the watch's wide, short LCD sized to the window; the 7-segment rows show
   // the time, the tabs and an alarm when an agent needs you; the pushers
   // work: LIGHT (backlight), MODE (next tab), START·STOP (search), ALARM.
   bindWatch() {
@@ -614,8 +614,6 @@ class App {
       const h = this.stageHome;
       if (h) h.parent.insertBefore(stage, h.next);
       $('#watchface .lcd-screen').style.cssText = '';
-      this.watchFont = 0;
-      for (const p of this.panes.values()) p.setFontSize(this.termFontSize());
       requestAnimationFrame(() => this.activePane()?.layout(true));
     }
   }
@@ -625,37 +623,29 @@ class App {
     this.watchFitFrame = requestAnimationFrame(() => this.fitWatch());
   }
 
-  // Pick the LCD font size that lets the whole watch fit the window, then
-  // size the LCD to exactly WATCH_COLS x WATCH_ROWS cells, edge to edge.
+  // Size the LCD to the window: as many whole cells as fit at the person's
+  // font size, so resizing the window resizes the terminal and the text
+  // always fills the LCD edge to edge.
   async fitWatch() {
     if (!this.watchMode) return;
-    const COLS = WATCH_COLS, ROWS = WATCH_ROWS;
     const screen = $('#watchface .lcd-screen');
     const caseEl = $('#watchface .case');
-    const cell = (p) => p?.term._core?._renderService?.dimensions?.css?.cell;
     const pane = this.activePane();
-    // How much room the watch around the LCD takes.
+    const c = pane?.term._core?._renderService?.dimensions?.css?.cell;
+    if (!c?.width) return;
     const chromeW = caseEl.offsetWidth - screen.offsetWidth;
     const chromeH = caseEl.offsetHeight - screen.offsetHeight;
-    const c0 = cell(pane);
-    const fs0 = pane ? pane.term.options.fontSize : 18;
-    const perPxW = c0?.width ? c0.width / fs0 : 0.5;
-    const perPxH = c0?.height ? c0.height / fs0 : 1.15;
-    const availH = window.innerHeight * 0.8 - chromeH;
-    const availW = Math.min(window.innerWidth - 60, 1100) - chromeW;
-    const fs = Math.max(10, Math.min(40, Math.floor(Math.min(availH / (ROWS * perPxH), availW / (COLS * perPxW)))));
-    this.watchFont = fs;
-    for (const p of this.panes.values()) p.term.options.fontSize = fs;
-    await new Promise((r) => requestAnimationFrame(r));
-    const c = cell(this.activePane());
-    if (!c?.width) return;
-    const cs = getComputedStyle(this.activePane().term.element);
+    const cs = getComputedStyle(pane.term.element);
     const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
     const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    const availW = window.innerWidth - 2 * 24 - chromeW; // room for the pushers
+    const availH = window.innerHeight - 2 * 28 - chromeH; // a bit of strap shows
+    const cols = Math.max(WATCH_MIN_COLS, Math.floor((availW - padX) / c.width));
+    const rows = Math.max(WATCH_MIN_ROWS, Math.floor((availH - padY) / c.height));
     // The pane reaches 14px past the LCD's right edge (hidden), where xterm
     // keeps its scrollbar gutter, so the text itself fills the LCD.
-    screen.style.width = Math.ceil(COLS * c.width + padX + 0.5) + 'px';
-    screen.style.height = Math.ceil(ROWS * c.height + padY + 0.5) + 'px';
+    screen.style.width = Math.ceil(cols * c.width + padX + 0.5) + 'px';
+    screen.style.height = Math.ceil(rows * c.height + padY + 0.5) + 'px';
     requestAnimationFrame(() => { for (const p of this.panes.values()) if (p.visible) { p.layout(true); p.sendSize(true); } });
   }
 
@@ -766,7 +756,10 @@ class App {
     save(k, v);
     if (k === 'theme' || k === 'opacity') this.applyTheme();
     if (k === 'optionIsMeta') for (const p of this.panes.values()) p.term.options.macOptionIsMeta = v;
-    if (k === 'fontSize' || k === 'mobileFontSize') for (const p of this.panes.values()) p.setFontSize(this.termFontSize());
+    if (k === 'fontSize' || k === 'mobileFontSize') {
+      for (const p of this.panes.values()) p.setFontSize(this.termFontSize());
+      if (this.watchMode) this.fitWatchSoon();
+    }
     if (k === 'sidebarHidden') {
       document.body.classList.toggle('side-hidden', !!v);
       this.activePane()?.layout(true);
@@ -809,7 +802,6 @@ class App {
   // The terminal's font size: the person's size, scaled for themes whose
   // terminal font draws small (e.g. a pixel font).
   termFontSize() {
-    if (this.watchMode && this.watchFont) return this.watchFont; // sized to fit the watch
     return Math.round(this.fontSize() * (this.termScale || 1));
   }
 
@@ -939,6 +931,7 @@ class App {
     if (this.termFontWanted !== f) return; // changed again meanwhile
     this.termFont = f; // new terminals use it from now on
     for (const p of this.panes?.values() || []) p.setFontFamily(f);
+    if (this.watchMode) this.fitWatchSoon();
   }
 
   // Background opacity applies in the desktop app only.
