@@ -498,6 +498,14 @@ class App {
     this.tmuxDo(s.host, 'select-window', `${s.tmuxSession}:${w.index}`);
   }
 
+  // Through every tab in sidebar order, crossing workspaces.
+  cycleAllTabs(d) {
+    const tabs = this.allTabs();
+    if (!tabs.length) return;
+    const i = tabs.findIndex((t) => t.id === this.activeId());
+    this.focusSession(tabs[(i + d + tabs.length) % tabs.length].id);
+  }
+
   switchWorkspace(ws) {
     this.ws = ws;
     save('workspace', ws);
@@ -1362,7 +1370,7 @@ class App {
     onWheelStep($('#tabbar'), '#ws-title', (d) => this.cycleWorkspace(d));
     // Only when the sidebar fits; otherwise the wheel scrolls it as usual.
     const sideFits = () => { const b = $('#side-body'); return b.scrollHeight <= b.clientHeight; };
-    onWheelStep($('#side'), '.ws-row', (d) => this.cycleWorkspace(d), sideFits);
+    onWheelStep($('#side'), '.workspaces', (d) => this.cycleAllTabs(d), sideFits);
     onWheelStep($('#statusline'), '.tmux-wins-bar', (d) => this.cycleTmuxWindow(d));
     onWheelStep($('#watchface'), '.w-tabs', (d) => this.cycleTab(d));
     $('#tabs').addEventListener('auxclick', (ev) => {
@@ -2260,7 +2268,7 @@ class App {
 
   renderSidebar() {
     const parts = [];
-    parts.push('<div class="group"><h3>Workspaces <button class="mini" data-act="new-ws" title="New workspace" aria-label="New workspace">+</button></h3>');
+    parts.push('<div class="group workspaces"><h3>Workspaces <button class="mini" data-act="new-ws" title="New workspace" aria-label="New workspace">+</button></h3>');
     const nums = this.tabNumbers();
     for (const ws of this.workspaces()) {
       const tabs = this.tabsOf(ws);
