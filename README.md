@@ -31,6 +31,8 @@
   <img src="docs/img/hero.png" alt="Gecko in the Tokyo Night theme with workspaces on two machines, Claude Code working and Codex waiting for approval in the agent dock">
 </p>
 
+## Quick Start
+
 ```sh
 git clone https://github.com/eternaleclipse/gecko && cd gecko
 make install      # needs Go 1.22+ and Node 18+
