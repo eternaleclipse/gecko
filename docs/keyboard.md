@@ -19,6 +19,11 @@
 | Show / hide workspaces sidebar | ⌘B | Ctrl+Shift+B |
 | Fullscreen (hold Esc to leave) | ⌃⌘F | F11 |
 
+The mouse wheel switches too: over the tab bar it moves to the next or
+previous tab, over a workspace name to the next or previous workspace, and
+over tmux's window chips in the status line to the next or previous tmux
+window.
+
 Type `?` in the palette to list every shortcut. **Change Theme** in the
 palette previews [themes](themes.md) live. Like all settings, the theme is saved in
 `~/.gecko-terminal/settings.json` and shared by every window. Browsers keep a few combos for

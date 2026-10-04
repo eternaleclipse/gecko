@@ -44,6 +44,27 @@ import { $, esc, ago, shortPath, copyText, readClipboard, fuzzy, store, save, is
 
 const MAX_LIVE_PANES = 12;
 
+// Turns the mouse wheel over el into next (+1) / previous (-1) steps for
+// elements matching sel. A wheel notch is one step; a trackpad has to
+// travel a bit, and its momentum can't fly through a long list.
+function onWheelStep(el, sel, step, when = () => true) {
+  let acc = 0, lastEvent = 0, lastStep = 0;
+  el.addEventListener('wheel', (ev) => {
+    const target = ev.target.closest(sel);
+    if (!target || ev.ctrlKey || !when()) return; // ctrl+wheel is pinch zoom
+    ev.preventDefault();
+    const d = Math.abs(ev.deltaY) >= Math.abs(ev.deltaX) ? ev.deltaY : ev.deltaX;
+    const now = performance.now();
+    if (now - lastEvent > 250) acc = 0;
+    lastEvent = now;
+    acc += ev.deltaMode ? d * 40 : d; // lines or pages, not pixels
+    if (Math.abs(acc) < 40 || now - lastStep < 120) return;
+    lastStep = now;
+    step(acc > 0 ? 1 : -1, target);
+    acc = 0;
+  }, { passive: false });
+}
+
 // The theme this browser last used. "theme" once meant system/dark/light
 // and the theme id was stored as "scheme"; both still load.
 function initialTheme() {
@@ -466,6 +487,15 @@ class App {
     if (!tabs.length) return;
     const i = tabs.findIndex((t) => t.id === this.activeId());
     this.focusSession(tabs[(i + d + tabs.length) % tabs.length].id);
+  }
+
+  cycleTmuxWindow(d) {
+    const s = this.activeSession();
+    const wins = this.tmux.find((t) => t.host === s?.host && t.name === s?.tmuxSession)?.wins;
+    if (!wins?.length) return;
+    const i = wins.findIndex((w) => w.active);
+    const w = wins[(i + d + wins.length) % wins.length];
+    this.tmuxDo(s.host, 'select-window', `${s.tmuxSession}:${w.index}`);
   }
 
   switchWorkspace(ws) {
@@ -1328,6 +1358,13 @@ class App {
       if (this.isDouble('tab:' + t.dataset.tab)) return this.renameTab(t.dataset.tab);
       this.focusSession(t.dataset.tab);
     });
+    onWheelStep($('#tabbar'), '#tabs', (d) => this.cycleTab(d));
+    onWheelStep($('#tabbar'), '#ws-title', (d) => this.cycleWorkspace(d));
+    // Only when the sidebar fits; otherwise the wheel scrolls it as usual.
+    const sideFits = () => { const b = $('#side-body'); return b.scrollHeight <= b.clientHeight; };
+    onWheelStep($('#side'), '.ws-row', (d) => this.cycleWorkspace(d), sideFits);
+    onWheelStep($('#statusline'), '.tmux-wins-bar', (d) => this.cycleTmuxWindow(d));
+    onWheelStep($('#watchface'), '.w-tabs', (d) => this.cycleTab(d));
     $('#tabs').addEventListener('auxclick', (ev) => {
       const t = ev.target.closest('[data-tab]');
       if (t && ev.button === 1) this.closeTab(t.dataset.tab);
