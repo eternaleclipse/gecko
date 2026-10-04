@@ -39,6 +39,7 @@ import { WebglAddon } from '@xterm/addon-webgl';
 import { Pane, FONT } from './pane.js';
 import { THEMES, AUTO, resolveTheme, paintTheme, swatch } from './themes.js';
 import { Keys, prettyCombo, comboOf, ACTIONS, DEFAULTS, DEFAULT_TAB_MODIFIER, TAB_MODIFIERS } from './keys.js';
+import { startupChime } from './sound.js';
 import { $, esc, ago, shortPath, copyText, readClipboard, fuzzy, store, save, isTouch, isMac } from './util.js';
 
 const MAX_LIVE_PANES = 12;
@@ -54,7 +55,7 @@ function initialTheme() {
 
 // Settings saved in ~/.gecko-terminal/settings.json (the rest of what the
 // browser stores is per-window state, like which tab is open).
-const SYNCED = ['theme', 'opacity', 'fontSize', 'mobileFontSize', 'copyOnSelect', 'smartCopy', 'optionIsMeta', 'renderer', 'sidebarHidden', 'keys'];
+const SYNCED = ['theme', 'opacity', 'fontSize', 'mobileFontSize', 'copyOnSelect', 'smartCopy', 'optionIsMeta', 'renderer', 'sidebarHidden', 'keys', 'startupSound'];
 
 // Protocol version this client speaks; see internal/proto.
 const PROTOCOL = 6;
@@ -172,6 +173,7 @@ class App {
       opacity: store('opacity', 0.9), // desktop app background opacity
       sidebarHidden: store('sidebarHidden', false),
       keys: store('keys', {}), // key binding overrides
+      startupSound: store('startupSound', true),
     };
     // `gecko open` asks for a window that fits a terminal of this size,
     // centered; done once, then dropped from the URL.
@@ -228,6 +230,7 @@ class App {
         }
         for (const id of this.sessions.keys()) if (!fresh.has(id)) this.sessionGone(id);
         this.sessions = fresh;
+        if (!this.firstSync && this.settings.startupSound) startupChime();
         this.firstSync = true;
         splash.done(); // tabs are in: ready
         this.ensureWorkspace();
@@ -1861,6 +1864,7 @@ class App {
     add('Restart Gecko', 'Restarts the background service with the installed version; your tabs and what runs in them keep going', () => this.restartService(), 'Command', undefined, 'restart upgrade update reload daemon service');
     add('Open on another device', 'Phone or tablet: shows a link and QR code', () => this.openShare(), 'Command', undefined, 'phone mobile tablet qr share link');
     add('Notify me when agents need input', '', () => this.enableNotifications(), 'Setting', undefined, 'notifications alerts');
+    add(`Startup sound: ${this.settings.startupSound ? 'on' : 'off'}`, 'A short chime when Gecko opens', () => this.setSetting('startupSound', !this.settings.startupSound), 'Setting', undefined, 'sound audio chime startup launch mute');
     add(`Copy on select: ${this.settings.copyOnSelect ? 'on' : 'off'}`, 'Toggle', () => this.setSetting('copyOnSelect', !this.settings.copyOnSelect), 'Setting', undefined, 'clipboard selection');
     if (!isMac) add(`Ctrl+C copies selected text: ${this.settings.smartCopy ? 'on' : 'off'}`, 'Without a selection it still interrupts', () => this.setSetting('smartCopy', !this.settings.smartCopy), 'Setting');
     if (isMac) add(`Option key as Meta: ${this.settings.optionIsMeta ? 'on' : 'off'}`, 'Toggle', () => this.setSetting('optionIsMeta', !this.settings.optionIsMeta), 'Setting');

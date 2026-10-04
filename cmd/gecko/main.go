@@ -257,17 +257,18 @@ func cmdOpen() error {
 		return cmd.Start()
 	}
 	app := "--app=" + u
-	size := windowArgs()
+	// Lets the startup chime play without a click first.
+	flags := append(windowArgs(), "--autoplay-policy=no-user-gesture-required")
 	switch runtime.GOOS {
 	case "darwin":
 		for _, b := range []string{"Google Chrome", "Microsoft Edge", "Brave Browser", "Chromium", "Arc"} {
 			if _, err := os.Stat("/Applications/" + b + ".app"); err == nil {
-				return exec.Command("open", append([]string{"-na", b, "--args", app}, size...)...).Start()
+				return exec.Command("open", append([]string{"-na", b, "--args", app}, flags...)...).Start()
 			}
 		}
 		return exec.Command("open", u).Start()
 	case "windows":
-		if err := exec.Command("cmd", append([]string{"/c", "start", "", "msedge", app}, size...)...).Start(); err == nil {
+		if err := exec.Command("cmd", append([]string{"/c", "start", "", "msedge", app}, flags...)...).Start(); err == nil {
 			return nil
 		}
 		return exec.Command("rundll32", "url.dll,FileProtocolHandler", u).Start()
@@ -275,7 +276,7 @@ func cmdOpen() error {
 		for _, b := range []string{"google-chrome", "google-chrome-stable", "chromium", "chromium-browser", "microsoft-edge", "brave-browser"} {
 			if p, err := exec.LookPath(b); err == nil {
 				// --class lets the dock match the window to gecko.desktop.
-				return exec.Command(p, append([]string{app, "--class=gecko"}, size...)...).Start()
+				return exec.Command(p, append([]string{app, "--class=gecko"}, flags...)...).Start()
 			}
 		}
 		return exec.Command("xdg-open", u).Start()

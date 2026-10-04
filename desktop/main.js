@@ -65,6 +65,7 @@ function createWindow() {
       contextIsolation: true,
       sandbox: true,
       spellcheck: false,
+      autoplayPolicy: 'no-user-gesture-required', // the startup chime
     },
   });
   w.once('ready-to-show', () => w.show());

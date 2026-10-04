@@ -41,6 +41,9 @@
 - **Settings follow you.** Theme, fonts, key bindings and the rest live in
   `~/.gecko-terminal/settings.json` and sync live to every window and device.
   Every shortcut can be remapped (Ctrl+K, then **Keyboard shortcuts…**).
+- **A startup chime.** Three soft notes play when Gecko opens. Turn it off
+  with **Startup sound** in the palette. Plain browser tabs stay silent until
+  you click, as browsers require.
 - **Updates keep your tabs.** `gecko upgrade` (and `make install`) restart the
   service in place: shells, agents and their output carry over, and windows
   reconnect by themselves. Remote machines update the same way from the
