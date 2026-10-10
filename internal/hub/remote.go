@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/gecko-term/gecko/internal/execx"
 	"github.com/gecko-term/gecko/internal/hostsetup"
 	"github.com/gecko-term/gecko/internal/proto"
 	"github.com/gecko-term/gecko/internal/session"
@@ -115,7 +116,7 @@ func (t *tailBuf) String() string {
 }
 
 func (r *Remote) serve() error {
-	cmd := exec.Command(r.argv[0], r.argv[1:]...)
+	cmd := execx.Command(r.argv[0], r.argv[1:]...)
 	stderr := &tailBuf{}
 	cmd.Stderr = stderr
 	in, err := cmd.StdinPipe()

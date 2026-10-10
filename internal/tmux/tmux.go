@@ -9,12 +9,14 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gecko-term/gecko/internal/execx"
 )
 
 func run(args ...string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
-	cmd := exec.CommandContext(ctx, "tmux", args...)
+	cmd := execx.CommandContext(ctx, "tmux", args...)
 	cmd.Env = cleanEnv()
 	out, err := cmd.Output()
 	return string(out), err
@@ -136,7 +138,7 @@ func Do(action, target, arg, client string) error {
 func runErr(args ...string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	cmd := exec.CommandContext(ctx, "tmux", args...)
+	cmd := execx.CommandContext(ctx, "tmux", args...)
 	cmd.Env = cleanEnv()
 	out, err := cmd.CombinedOutput()
 	return string(out), err

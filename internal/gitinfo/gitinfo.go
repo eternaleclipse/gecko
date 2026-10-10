@@ -5,11 +5,12 @@ package gitinfo
 import (
 	"context"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gecko-term/gecko/internal/execx"
 )
 
 // Info describes the repository containing a directory.
@@ -97,7 +98,7 @@ type Status struct {
 func ReadStatus(root string, timeout time.Duration) (st Status, ok bool) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
-	cmd := exec.CommandContext(ctx, "git", "-C", root, "--no-optional-locks", "status", "--porcelain=v2", "--branch")
+	cmd := execx.CommandContext(ctx, "git", "-C", root, "--no-optional-locks", "status", "--porcelain=v2", "--branch")
 	cmd.Env = append(os.Environ(), "GIT_OPTIONAL_LOCKS=0", "LC_ALL=C")
 	out, err := cmd.Output()
 	if err != nil {

@@ -17,6 +17,7 @@ import (
 	"sync"
 
 	"github.com/gecko-term/gecko/internal/config"
+	"github.com/gecko-term/gecko/internal/execx"
 )
 
 // Result is what a successful check found.
@@ -36,7 +37,7 @@ func sshCmd(ctx context.Context, target string, remote string) *exec.Cmd {
 	if port != "" {
 		args = append(args, "-p", port)
 	}
-	return exec.CommandContext(ctx, "ssh", append(args, dest, remote)...)
+	return execx.CommandContext(ctx, "ssh", append(args, dest, remote)...)
 }
 
 // shQuote quotes s for a POSIX shell.
@@ -173,7 +174,7 @@ func Install(ctx context.Context, target string, res Result, log func(string)) e
 	}
 	args = append(args, bin, user+host+":.local/bin/gecko.new")
 	log("$ scp " + filepath.Base(bin) + " " + dest + ":~/.local/bin/gecko")
-	if last, err := run(exec.CommandContext(ctx, "scp", args...), log); err != nil {
+	if last, err := run(execx.CommandContext(ctx, "scp", args...), log); err != nil {
 		return errors.New(Explain(last, ""))
 	}
 	if last, err := run(sshCmd(ctx, target, "chmod +x ~/.local/bin/gecko.new && mv ~/.local/bin/gecko.new ~/.local/bin/gecko"), log); err != nil {
