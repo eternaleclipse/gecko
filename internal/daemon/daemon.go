@@ -13,6 +13,7 @@ import (
 	"os/exec"
 	"os/signal"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"syscall"
 	"time"
@@ -38,8 +39,12 @@ func Run(cfg *config.Config, listen string) error {
 	if err := os.MkdirAll(filepath.Dir(sock), 0o700); err != nil {
 		return err
 	}
-	if st, err := os.Stat(filepath.Dir(sock)); err != nil || st.Mode().Perm()&0o077 != 0 {
-		return errors.New("refusing to use socket dir with loose permissions: " + filepath.Dir(sock))
+	// Windows has no POSIX mode bits (Go reports 0777 for every directory);
+	// the profile directory's ACL is what keeps other users out there.
+	if runtime.GOOS != "windows" {
+		if st, err := os.Stat(filepath.Dir(sock)); err != nil || st.Mode().Perm()&0o077 != 0 {
+			return errors.New("refusing to use socket dir with loose permissions: " + filepath.Dir(sock))
+		}
 	}
 	// Started by `gecko upgrade`? Then the previous process handed us its
 	// sockets and sessions.
@@ -221,7 +226,10 @@ func Spawn() error {
 	defer logf.Close()
 	cmd := exec.Command(exe, "daemon")
 	cmd.Stdout, cmd.Stderr = logf, logf
-	cmd.Dir = os.Getenv("HOME")
+	// Somewhere stable, and USERPROFILE on Windows where HOME is unset.
+	if home, err := os.UserHomeDir(); err == nil {
+		cmd.Dir = home
+	}
 	detach(cmd)
 	if err := cmd.Start(); err != nil {
 		return err

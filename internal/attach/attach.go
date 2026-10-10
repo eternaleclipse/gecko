@@ -33,10 +33,12 @@ func Run(c *client.Client, id string) error {
 	if err != nil {
 		return err
 	}
+	restoreVT := enableVT()
 	var once sync.Once
 	restore := func() {
 		once.Do(func() {
 			os.Stdout.WriteString(restoreModes)
+			restoreVT()
 			_ = term.Restore(fd, old)
 		})
 	}

@@ -268,8 +268,8 @@ func cmdOpen() error {
 		}
 		return exec.Command("open", u).Start()
 	case "windows":
-		if err := exec.Command("cmd", append([]string{"/c", "start", "", "msedge", app}, flags...)...).Start(); err == nil {
-			return nil
+		if p := windowsBrowser(); p != "" {
+			return exec.Command(p, append([]string{app}, flags...)...).Start()
 		}
 		return exec.Command("rundll32", "url.dll,FileProtocolHandler", u).Start()
 	default:
@@ -281,6 +281,42 @@ func cmdOpen() error {
 		}
 		return exec.Command("xdg-open", u).Start()
 	}
+}
+
+// windowsBrowser finds a Chromium-family browser for the chromeless app
+// window. Starting its exe directly, rather than through `cmd /c start`,
+// keeps the `&` in the URL away from cmd.exe (which would cut the query
+// string in two) and makes a failure to launch a real error.
+func windowsBrowser() string {
+	var roots []string
+	for _, e := range []string{"LOCALAPPDATA", "ProgramFiles", "ProgramFiles(x86)"} {
+		if v := os.Getenv(e); v != "" {
+			roots = append(roots, v)
+		}
+	}
+	for _, b := range []string{
+		`Google\Chrome\Application\chrome.exe`,
+		`Microsoft\Edge\Application\msedge.exe`,
+		`BraveSoftware\Brave-Browser\Application\brave.exe`,
+		`Chromium\Application\chrome.exe`,
+	} {
+		for _, root := range roots {
+			if p := filepath.Join(root, b); fileExists(p) {
+				return p
+			}
+		}
+	}
+	for _, b := range []string{"msedge.exe", "chrome.exe"} {
+		if p, err := exec.LookPath(b); err == nil {
+			return p
+		}
+	}
+	return ""
+}
+
+func fileExists(p string) bool {
+	st, err := os.Stat(p)
+	return err == nil && !st.IsDir()
 }
 
 func ago(ms int64) string {
