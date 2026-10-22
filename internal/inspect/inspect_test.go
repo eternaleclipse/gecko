@@ -56,6 +56,16 @@ func TestClassify(t *testing.T) {
 			t.Errorf("%q: got %+v", args, i)
 		}
 	}
+	// pi from npm, by its launcher name and by the path of its bundle.
+	for _, args := range [][]string{
+		{"pi"},
+		{"/home/u/.pi/agent/bin/pi"},
+		{"node", "/home/u/.pi/agent/install/releases/1.3.0/node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js"},
+	} {
+		if i := Classify([]*Proc{{Pid: 13, Args: args}}); i.Agent != "pi" {
+			t.Errorf("%q: got %+v", args, i)
+		}
+	}
 	if i := Classify(nil); i.Kind != "shell" {
 		t.Errorf("got %+v", i)
 	}
@@ -83,6 +93,12 @@ func TestTitleAgent(t *testing.T) {
 		{"gecko-agent-demo", "codex", "", ""},
 		{"OpenCode", "", "opencode", ""},
 		{"OC | Greeting", "", "opencode", ""},
+		// Recorded from pi 1.3 in a pty: "π - <dir>", set once and never spun.
+		{"π - gecko", "", "pi", ""},
+		{"π - /home/u/src/api", "", "pi", ""},
+		// A shell whose directory is named "π" is not pi.
+		{"π", "", "", ""},
+		{"π -", "", "", ""},
 	}
 	for _, c := range cases {
 		a, st, ok := TitleAgent(c.title, c.current)
