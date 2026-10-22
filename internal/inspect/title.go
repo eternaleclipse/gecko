@@ -42,6 +42,10 @@ var TitleRules = []TitleRule{
 	// (opencode 1.19); nothing about its status.
 	{Agent: "opencode", Status: "", Start: true, Re: regexp.MustCompile(`^OpenCode$`)},
 	{Agent: "opencode", Status: "", Start: true, Re: regexp.MustCompile(`^OC \| \S`)},
+	// pi: "π - <dir>" from start until it exits (pi 1.3, recorded in a
+	// pty); it sets the title once and never spins it, so it says nothing
+	// about its status.
+	{Agent: "pi", Status: "", Start: true, Re: regexp.MustCompile(`^π - \S`)},
 }
 
 // TitleAgent reads a terminal title. current is the agent already seen in

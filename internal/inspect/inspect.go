@@ -76,6 +76,7 @@ var agentNames = map[string]string{
 	"gemini": "gemini", "opencode": "opencode", "goose": "goose", "amp": "amp",
 	"cursor-agent": "cursor", "copilot": "copilot", "crush": "crush", "qwen": "qwen",
 	"cline": "cline", "kiro": "kiro", "droid": "droid", "auggie": "auggie", "kimi": "kimi",
+	"pi": "pi",
 }
 
 // AddAgent registers an extra agent executable name.
@@ -113,6 +114,9 @@ func AgentOf(p *Proc) string {
 		}
 		if strings.Contains(a, "@google/gemini-cli") {
 			return "gemini"
+		}
+		if strings.Contains(a, "@earendil-works/pi-coding-agent") {
+			return "pi"
 		}
 	}
 	return ""
