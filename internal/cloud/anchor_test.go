@@ -84,6 +84,12 @@ func TestMakeAnchorThroughRelay(t *testing.T) {
 		t.Fatal(err)
 	}
 	waitFor(t, "devbox connected over the relay", func() bool { return connected(laptop, "devbox") })
+	// And devbox to its own machine: the create below goes there, and a slow
+	// runner could get to it first ("host box is offline").
+	waitFor(t, "devbox connected to box", func() bool {
+		b := devbox.hub.Backend("box")
+		return b != nil && b.Info().Status == "connected"
+	})
 
 	hello, call, next := pageOn(t, laptop.hub, "devbox")
 	if hello.Host != "devbox" || hello.Door != "laptop" || hello.Scope != hub.ScopeAll || hello.Error != "" {
