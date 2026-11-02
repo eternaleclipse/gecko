@@ -122,9 +122,7 @@ func Run(cfg *config.Config, listen string) error {
 			go server.ServeLocal(h, proto.NewStreamConn(c, c, c))
 		}
 	}
-	go accept(ln)
 	if extra != nil {
-		go accept(extra)
 		defer extra.Close()
 	}
 
@@ -162,6 +160,15 @@ func Run(cfg *config.Config, listen string) error {
 		}
 	}
 	_ = os.WriteFile(filepath.Join(config.StateDir(), "pid"), []byte(strconv.Itoa(os.Getpid())), 0o600)
+
+	// Answer on the socket only now: a client that started this daemon
+	// (gecko url, gecko open) reads the web address from state/web as soon
+	// as it connects, and used to get the default port when it got in first.
+	// Until then connections wait in the socket's backlog.
+	go accept(ln)
+	if extra != nil {
+		go accept(extra)
+	}
 
 	// `gecko upgrade`: replace this process with the (new) binary on disk,
 	// keeping every session and both listening sockets.
