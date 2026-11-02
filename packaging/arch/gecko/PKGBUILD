@@ -2,7 +2,7 @@
 # Gecko built from source; the window runs on Arch's electron package.
 # The prebuilt alternative (bundled Electron) is gecko-bin.
 pkgname=gecko
-pkgver=0.3.2
+pkgver=0.3.3
 pkgrel=1
 pkgdesc="Terminal multiplexer for coding agents across your machines"
 arch=('x86_64' 'aarch64')

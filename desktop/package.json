@@ -1,7 +1,7 @@
 {
   "name": "gecko",
   "private": true,
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Native window for Gecko: a see-through background, no browser chrome",
   "main": "main.js",
   "scripts": {

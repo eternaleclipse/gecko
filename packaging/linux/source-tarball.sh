@@ -3,7 +3,7 @@
 # modules vendored and the web client already built (web/dist). For the
 # Launchpad PPA (debian/), Fedora COPR (packaging/rpm) and anyone packaging
 # Gecko offline. Needs `make web` first.
-#   PKG_VERSION=0.3.2 packaging/linux/source-tarball.sh   -> dist/packages/gecko-0.3.2-src.tar.gz
+#   PKG_VERSION=0.3.3 packaging/linux/source-tarball.sh   -> dist/packages/gecko-0.3.3-src.tar.gz
 set -eu
 cd "$(dirname "$0")/../.."
 GO=${GO:-go}

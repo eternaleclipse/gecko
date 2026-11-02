@@ -1,6 +1,6 @@
 pkgbase = gecko
 	pkgdesc = Terminal multiplexer for coding agents across your machines
-	pkgver = 0.3.2
+	pkgver = 0.3.3
 	pkgrel = 1
 	url = https://github.com/eternaleclipse/gecko
 	arch = x86_64
@@ -14,7 +14,7 @@ pkgbase = gecko
 	optdepends = tmux: tmux sessions in Gecko
 	optdepends = mosh: mosh connections to other machines
 	conflicts = gecko-bin
-	source = gecko-0.3.2.tar.gz::https://github.com/eternaleclipse/gecko/archive/v0.3.2.tar.gz
+	source = gecko-0.3.3.tar.gz::https://github.com/eternaleclipse/gecko/archive/v0.3.3.tar.gz
 	sha256sums = SKIP
 
 pkgname = gecko

@@ -1,3 +1,12 @@
+gecko (0.3.3-1) unstable; urgency=medium
+
+  * New upstream release 0.3.3: a desktop window whose page was killed
+    (by the out-of-memory killer or a crash) reloads it instead of
+    freezing on its last frame. gecko url and gecko open no longer report
+    the default port from a daemon they have just started.
+
+ -- Gecko contributors <gecko@users.noreply.github.com>  Mon, 02 Nov 2026 12:00:00 +0000
+
 gecko (0.3.2-1) unstable; urgency=medium
 
   * New upstream release 0.3.2: Codex and OpenCode have their own status,

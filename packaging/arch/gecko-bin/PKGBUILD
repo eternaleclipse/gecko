@@ -2,7 +2,7 @@
 # AUR package: Gecko from the release tarball (prebuilt gecko and its
 # Electron window). The source build is the "gecko" package.
 pkgname=gecko-bin
-pkgver=0.3.2
+pkgver=0.3.3
 pkgrel=1
 pkgdesc="Terminal multiplexer for coding agents across your machines (CLI, daemon and native window)"
 arch=('x86_64' 'aarch64')

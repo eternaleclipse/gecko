@@ -1,7 +1,7 @@
 #!/bin/sh
 # Builds the snap from the release tarball made by `make packages
 # PLATFORMS=linux` (dist/packages/gecko-<ver>-linux-x86_64.tar.gz):
-#   packaging/snap/build.sh 0.3.2   -> dist/packages/gecko_0.3.2_amd64.snap
+#   packaging/snap/build.sh 0.3.3   -> dist/packages/gecko_0.3.3_amd64.snap
 # Uses snapcraft --destructive-mode, so run it on Ubuntu 24.04 (the core24
 # base), in CI or a VM. Without it, snapcraft builds in an LXD container.
 set -eu
