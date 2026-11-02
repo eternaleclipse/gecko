@@ -40,8 +40,8 @@ root, and replace `LicenseRef-Unspecified` in:
 make packages PLATFORMS=linux     # dist/packages: .deb and .rpm (gecko, gecko-desktop),
                                   # gecko-<ver>-linux-{x86_64,aarch64}.tar.gz
 LINUX_ARCHS=amd64 make packages PLATFORMS=linux     # one arch
-PKG_VERSION=0.3.2 packaging/linux/source-tarball.sh # gecko-<ver>-src.tar.gz (offline source)
-packaging/snap/build.sh 0.3.2     # gecko_<ver>_amd64.snap (Ubuntu 24.04)
+PKG_VERSION=0.3.3 packaging/linux/source-tarball.sh # gecko-<ver>-src.tar.gz (offline source)
+packaging/snap/build.sh 0.3.3     # gecko_<ver>_amd64.snap (Ubuntu 24.04)
 ```
 
 The version is the latest `v*` tag. CI (`.github/workflows/linux-packages.yml`)
@@ -134,7 +134,7 @@ Publish (per Ubuntu series, here noble; repeat with `oracular` etc. and a
 new `~<series>1` suffix):
 
 ```sh
-v=0.3.2 series=noble
+v=0.3.3 series=noble
 make web && PKG_VERSION=$v packaging/linux/source-tarball.sh
 mkdir -p ppa && cd ppa && cp ../dist/packages/gecko-$v-src.tar.gz gecko_$v.orig.tar.gz
 tar -xzf gecko_$v.orig.tar.gz && cp -a ../packaging/debian gecko-$v/debian && cd gecko-$v
@@ -173,8 +173,8 @@ Publish (from Ubuntu 24.04, or take the snap from the CI run's `snap`
 artifact):
 
 ```sh
-make packages PLATFORMS=linux LINUX_ARCHS=amd64 && packaging/snap/build.sh 0.3.2
-snapcraft upload --release=stable dist/packages/gecko_0.3.2_amd64.snap
+make packages PLATFORMS=linux LINUX_ARCHS=amd64 && packaging/snap/build.sh 0.3.3
+snapcraft upload --release=stable dist/packages/gecko_0.3.3_amd64.snap
 ```
 
 ## Fedora COPR
@@ -195,7 +195,7 @@ You need:
 Publish:
 
 ```sh
-copr-cli buildscm gecko --clone-url https://github.com/eternaleclipse/gecko.git --commit v0.3.2 --method make_srpm --spec packaging/rpm/gecko.spec
+copr-cli buildscm gecko --clone-url https://github.com/eternaleclipse/gecko.git --commit v0.3.3 --method make_srpm --spec packaging/rpm/gecko.spec
 ```
 
 Users: `sudo dnf copr enable <you>/gecko && sudo dnf install gecko`.
@@ -222,7 +222,7 @@ Publish (once per package; the AUR repository is created on first push):
 ```sh
 git clone ssh://aur@aur.archlinux.org/gecko-bin.git aur-gecko-bin
 cp packaging/arch/gecko-bin/PKGBUILD packaging/arch/gecko-bin/.SRCINFO aur-gecko-bin/
-cd aur-gecko-bin && git add PKGBUILD .SRCINFO && git commit -m "gecko-bin 0.3.2-1" && git push
+cd aur-gecko-bin && git add PKGBUILD .SRCINFO && git commit -m "gecko-bin 0.3.3-1" && git push
 ```
 
 ## Official distro repositories

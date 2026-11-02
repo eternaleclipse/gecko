@@ -24,6 +24,16 @@ Apps and packages, each built and smoke-tested in CI:
 - **Termux:** Gecko runs in [Termux](android.md#termux) on Android, and the
   Android app opens it like any other machine.
 
+New in 0.3.3:
+
+- **The desktop window doesn't freeze:** when its page is killed (the
+  out-of-memory killer picks it first, or a crash), the window reloads it
+  instead of sitting on its last frame with tabs that never change. The
+  sessions were never lost; they live in the daemon.
+- **`gecko url` right from the start:** a daemon that `gecko url` or
+  `gecko open` had just started could report the default port 7681 instead
+  of the one it listens on, so the window opened on nothing.
+
 New in 0.3.2:
 
 - **Codex and OpenCode, first class:** each has its own status reader,

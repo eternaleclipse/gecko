@@ -1,6 +1,6 @@
 pkgbase = gecko-bin
 	pkgdesc = Terminal multiplexer for coding agents across your machines (CLI, daemon and native window)
-	pkgver = 0.3.2
+	pkgver = 0.3.3
 	pkgrel = 1
 	url = https://github.com/eternaleclipse/gecko
 	arch = x86_64
@@ -28,9 +28,9 @@ pkgbase = gecko-bin
 	conflicts = gecko
 	options = !strip
 	options = !debug
-	source_x86_64 = https://github.com/eternaleclipse/gecko/releases/download/v0.3.2/gecko-0.3.2-linux-x86_64.tar.gz
+	source_x86_64 = https://github.com/eternaleclipse/gecko/releases/download/v0.3.3/gecko-0.3.3-linux-x86_64.tar.gz
 	sha256sums_x86_64 = SKIP
-	source_aarch64 = https://github.com/eternaleclipse/gecko/releases/download/v0.3.2/gecko-0.3.2-linux-aarch64.tar.gz
+	source_aarch64 = https://github.com/eternaleclipse/gecko/releases/download/v0.3.3/gecko-0.3.3-linux-aarch64.tar.gz
 	sha256sums_aarch64 = SKIP
 
 pkgname = gecko-bin

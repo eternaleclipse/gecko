@@ -2,7 +2,7 @@
 # Sets the version and checksums of both PKGBUILDs for a release and
 # regenerates .SRCINFO (needs makepkg, i.e. Arch or an archlinux container).
 # The release's tarballs must be on GitHub already.
-#   packaging/arch/update.sh 0.3.2
+#   packaging/arch/update.sh 0.3.3
 set -eu
 cd "$(dirname "$0")"
 ver=${1:?usage: update.sh <version>}

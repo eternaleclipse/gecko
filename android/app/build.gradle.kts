@@ -21,8 +21,8 @@ android {
         applicationId = "io.github.geckoterm.android"
         minSdk = 26
         targetSdk = 35
-        versionCode = 7
-        versionName = (project.findProperty("geckoVersion") as String?) ?: "0.3.2"
+        versionCode = 8
+        versionName = (project.findProperty("geckoVersion") as String?) ?: "0.3.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Instrumented tests connect to a Gecko daemon when given one:
         // -Pandroid.testInstrumentationRunnerArguments.geckoUrl=http://10.0.2.2:7810/?token=...

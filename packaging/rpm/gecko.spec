@@ -4,7 +4,7 @@
 # gecko-desktop: the native window, Electron from the release tarball
 # (Source1), since Fedora has no Electron to build it against.
 
-%{!?gecko_version: %global gecko_version 0.3.2}
+%{!?gecko_version: %global gecko_version 0.3.3}
 %global debug_package %{nil}
 # Electron carries its own copies of a few libraries; they are not for
 # other packages, and need nothing beyond what gecko-desktop requires.
@@ -107,6 +107,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/dev.gecko.app.
 %attr(4755,root,root) %{_prefix}/lib/gecko-desktop/chrome-sandbox
 
 %changelog
+* Mon Nov 02 2026 Gecko contributors <gecko@users.noreply.github.com> - 0.3.3-1
+- New upstream release 0.3.3
+
 * Tue Oct 20 2026 Gecko contributors <gecko@users.noreply.github.com> - 0.3.2-1
 - New upstream release 0.3.2
 
