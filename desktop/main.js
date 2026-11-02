@@ -298,8 +298,43 @@ function createWindow() {
       shell.openExternal(u);
     }
   });
+  watchRenderer(w);
   w.loadURL(url);
   return w;
+}
+
+// The page can die under the window: the kernel's OOM killer picks the
+// renderer first (Chromium gives it a high oom_score_adj), and a GPU or
+// renderer crash does the same. The window then keeps its last frame, tabs
+// that look alive but never change, until Gecko is restarted. Reload the
+// page instead: the sessions live in the daemon, so nothing is lost. Each
+// reload in a row waits longer (rendererDelay), so a page that crashes as
+// soon as it loads can't spin.
+const RELOAD_DELAYS = [0, 1000, 5000, 30000];
+const STABLE_MS = 60000;
+// state: { n: reloads in a row, at: when the last one happened }. A page
+// that stayed up for STABLE_MS starts the count again.
+function rendererDelay(state, now) {
+  const n = state.at !== undefined && now - state.at < STABLE_MS ? state.n : 0;
+  const delay = RELOAD_DELAYS[Math.min(n, RELOAD_DELAYS.length - 1)];
+  return { delay, state: { n: n + 1, at: now + delay } };
+}
+
+function watchRenderer(w) {
+  let state = { n: 0 };
+  let timer = null;
+  w.webContents.on('render-process-gone', (_ev, details) => {
+    if (details.reason === 'clean-exit' || w.isDestroyed() || timer) return;
+    let delay;
+    ({ delay, state } = rendererDelay(state, Date.now()));
+    console.error(`gecko: the page stopped (${details.reason}, exit ${details.exitCode}); reloading in ${delay / 1000}s`);
+    timer = setTimeout(() => {
+      timer = null;
+      if (w.isDestroyed()) return;
+      w.loadURL(url);
+      if (!w.isVisible()) w.show();
+    }, delay);
+  });
 }
 
 // The page sizes the window so the terminal is exactly 80x24 (see the
@@ -392,4 +427,4 @@ if (!app.requestSingleInstanceLock()) {
   });
 }
 
-module.exports = { windowStyle }; // for transparency.test.mjs
+module.exports = { windowStyle, rendererDelay }; // for transparency.test.mjs and renderer.test.mjs

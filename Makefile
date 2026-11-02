@@ -24,7 +24,7 @@ build:
 test:
 	$(GO) vet ./...
 	$(GO) test ./...
-	node --test web/src/gestures.test.mjs web/src/build.test.mjs web/src/ime.test.mjs web/src/themes.test.mjs web/src/transparency.test.mjs web/src/anchor.test.mjs web/src/viewport.test.mjs
+	node --test web/src/gestures.test.mjs web/src/build.test.mjs web/src/ime.test.mjs web/src/themes.test.mjs web/src/transparency.test.mjs web/src/renderer.test.mjs web/src/anchor.test.mjs web/src/viewport.test.mjs
 
 # The web app (PWA) on phones and tablets: Playwright with WebKit (iPhone)
 # and Chromium (Android) profiles against a throwaway daemon (web/e2e).
