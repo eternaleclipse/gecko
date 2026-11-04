@@ -23,6 +23,14 @@ func titleSession() *Session {
 	return s
 }
 
+// pi 1.3 as recorded in a pty: it asks whether the terminal listens
+// (OSC 7501 "?", which carries no state) and sets its title once. Its
+// title is never spun, so it says nothing about the status.
+const (
+	piStart = "\x1b]7501;?\x07\x1b]0;π - gecko-agent-demo\x07\x1b]7501;?\x07"
+	piExit  = "\x1b]0;\x07"
+)
+
 func TestTitleAgentOverSSH(t *testing.T) {
 	s := titleSession()
 	ssh := inspect.Info{Kind: "ssh", Proc: "ssh", Pid: 42}
@@ -41,6 +49,13 @@ func TestTitleAgentOverSSH(t *testing.T) {
 	check("idle", "claude", "idle")
 	s.vt.Write([]byte(claudeExit))
 	check("exit", "", "")
+
+	// pi, over ssh: recognised by its title alone, and its OSC 7501 query
+	// leaves the status to the general screen rules.
+	s.vt.Write([]byte("user@box:~$ pi\r\n" + piStart))
+	check("pi start", "pi", "")
+	s.vt.Write([]byte(piExit))
+	check("pi exit", "", "")
 
 	// Gone when the process it ran under is.
 	s.vt.Write([]byte(claudeStart))
@@ -65,7 +80,7 @@ func TestTitleAgentOverSSH(t *testing.T) {
 func TestTitleAgentFalsePositives(t *testing.T) {
 	s := titleSession()
 	ssh := inspect.Info{Kind: "ssh", Pid: 7}
-	for _, title := range []string{"user@box: ~", "vim main.go", "◐ building", "⠋ npm install", "✦ thinking (x)", "Claude Codex"} {
+	for _, title := range []string{"user@box: ~", "vim main.go", "◐ building", "⠋ npm install", "✦ thinking (x)", "Claude Codex", "π", "π -"} {
 		s.vt.Write([]byte("\x1b]0;" + title + "\x07"))
 		if n, _ := s.agentOf(ssh, "", ""); n != "" {
 			t.Errorf("title %q: agent %q", title, n)
